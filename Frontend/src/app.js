@@ -141,6 +141,11 @@ async function init() {
             background: 'rgba(15, 23, 42, 0.95)', // Dark Slate 900
         });
 
+        // Fetch stats for header
+        if (Auth.isLoggedIn()) {
+            Dashboard.fetchStatsSilent();
+        }
+
 
     } catch (error) {
         hideLoading();
@@ -309,6 +314,13 @@ function handleFiles(files) {
 }
 
 async function processSingle(item) {
+    // Check Limit
+    const allowed = await Dashboard.verifyLimit();
+    if (!allowed) {
+        alert("Monthly Limit Reached");
+        return;
+    }
+
     try {
         const img = await loadImage(item.file);
         item.originalImg = img;
@@ -332,6 +344,10 @@ async function processSingle(item) {
 
         processedImage.src = URL.createObjectURL(blob);
         processedSection.style.display = 'block';
+
+        // Track Usage
+        await Dashboard.trackSuccess();
+
         downloadBtn.style.display = 'flex';
         downloadBtn.onclick = () => downloadImage(item);
 

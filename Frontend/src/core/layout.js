@@ -73,6 +73,10 @@ export const Layout = {
             <!-- Desktop Nav -->
             <nav class="hidden md:flex items-center gap-6">
               ${isLoggedIn ? `
+                <div class="flex items-center gap-3 px-3 py-1 bg-white/5 rounded-full border border-white/5">
+                    <span class="material-icons-round text-sm text-indigo-400">bolt</span>
+                    <span id="header-usage-badge" class="text-xs font-mono font-bold text-white hidden">--/--</span>
+                </div>
                 <button onclick="window.Dashboard.show()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-all">
                   <span class="material-icons-round text-lg">dashboard</span>
                   Dashboard

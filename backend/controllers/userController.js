@@ -36,11 +36,14 @@ exports.trackUsage = async (req, res) => {
 
         // Check limit
         if (user.monthlyUsage >= user.monthlyLimit) {
+            console.log(`[TrackUsage] Limit reached for user ${req.userId}`);
             return res.status(403).send({ message: 'Monthly limit reached (20 images). Upgrade plan for more.' });
         }
 
+        console.log(`[TrackUsage] Before update: User ${req.userId}, Usage: ${user.monthlyUsage}`);
         user.monthlyUsage += 1;
         await user.save();
+        console.log(`[TrackUsage] After update: User ${req.userId}, Usage: ${user.monthlyUsage}`);
 
         res.status(200).send({
             message: 'Usage tracked.',

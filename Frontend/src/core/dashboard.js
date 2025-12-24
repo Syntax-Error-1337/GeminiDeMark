@@ -113,6 +113,9 @@ export const Dashboard = {
                         <button class="px-6 py-2 bg-white text-indigo-900 font-bold rounded-lg hover:bg-indigo-50 transition-colors">
                             View Plans
                         </button>
+                        <button onclick="window.Dashboard.trackSuccess()" class="mt-4 text-xs text-indigo-300 underline">
+                            Test Tracking (Debug)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -142,14 +145,53 @@ export const Dashboard = {
     },
 
     // Increment after success
+    // Increment after success
     async trackSuccess() {
         if (!Auth.isLoggedIn()) return;
         try {
             const token = localStorage.getItem(Auth.TOKEN_KEY);
-            await fetch(`${Auth.API_URL.replace('/auth', '/user')}/track`, {
+            const response = await fetch(`${Auth.API_URL.replace('/auth', '/user')}/track`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log("[Dashboard] Track usage response status:", response.status);
+
+            if (response.ok) {
+                const data = await response.json();
+                this.syncHeaderStats(data.usage, data.limit);
+            }
+        } catch (e) { console.error(e); }
+    },
+
+    async fetchStatsSilent() {
+        if (!Auth.isLoggedIn()) return;
+        try {
+            const token = localStorage.getItem(Auth.TOKEN_KEY);
+            const response = await fetch(`${Auth.API_URL.replace('/auth', '/user')}/dashboard`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+            if (response.ok) {
+                const data = await response.json();
+                this.syncHeaderStats(data.monthlyUsage, data.monthlyLimit);
+            }
         } catch (e) { console.error(e); }
+    },
+
+    syncHeaderStats(usage, limit) {
+        const badge = document.getElementById('header-usage-badge');
+        if (badge) {
+            badge.textContent = `${usage} / ${limit}`;
+            badge.classList.remove('hidden');
+
+            // Visual feedback
+            badge.animate([
+                { transform: 'scale(1)' },
+                { transform: 'scale(1.2)' },
+                { transform: 'scale(1)' }
+            ], { duration: 300 });
+        }
     }
 };
