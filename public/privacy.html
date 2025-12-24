@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Gemini Watermark Remover</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        'primary-hover': '#059669',
+                        dark: '#1F2937',
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(16, 185, 129, 0.1)',
+                        'card': '0 0 20px rgba(0,0,0,0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+    </style>
+</head>
+
+<body
+    class="bg-[#050914] text-slate-300 antialiased selection:bg-indigo-500 selection:text-white flex flex-col min-h-screen">
+
+    <div id="app-header"></div>
+
+    <main class="flex-grow py-20 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto">
+
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Privacy Policy</h2>
+                <p class="text-slate-400">Last updated: December 24, 2025</p>
+            </div>
+
+            <div
+                class="bg-indigo-900/20 backdrop-blur-xl rounded-2xl border border-indigo-500/20 overflow-hidden mb-12">
+                <div class="bg-indigo-500/10 border-b border-indigo-500/10 px-8 py-6 flex items-center gap-4">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                        </path>
+                    </svg>
+                    <h3 class="text-lg font-bold text-white">Browser-Based Processing</h3>
+                </div>
+
+                <div class="p-8 md:p-10 space-y-4">
+                    <p class="text-lg text-slate-300 leading-relaxed">
+                        This service provides <strong class="text-white">browser-based image processing</strong>. All
+                        processing is done locally on your device.
+                    </p>
+                    <p class="text-lg text-slate-300 leading-relaxed">
+                        We <strong class="text-white">do not upload</strong> your images to any remote servers.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="app-footer"></div>
+    <script src="privacy.js"></script>
+</body>
+
+</html>
