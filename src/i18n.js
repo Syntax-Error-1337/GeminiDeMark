@@ -21,6 +21,7 @@ const i18n = {
 
   applyTranslations() {
     document.documentElement.lang = this.locale;
+    document.documentElement.dir = ['ar-SA', 'he', 'fa'].includes(this.locale) ? 'rtl' : 'ltr';
     document.title = this.t('title');
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');

@@ -85,10 +85,21 @@ export const Layout = {
 
               <div class="h-6 w-px bg-white/10 mx-1"></div>
 
-              <button id="langSwitch" class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-300 bg-white/5 hover:bg-white/10 hover:text-white border border-white/5 rounded-full transition-all">
-                <span class="material-icons-round text-sm opacity-70">translate</span>
-                <span>${i18n.locale === 'zh-CN' ? 'EN' : '中文'}</span>
-              </button>
+              <div class="relative">
+                <button id="langDropdownBtn" class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-300 bg-white/5 hover:bg-white/10 hover:text-white border border-white/5 rounded-full transition-all">
+                  <span class="material-icons-round text-sm opacity-70">translate</span>
+                  <span id="currentLangLabel">${{ 'en-US': 'EN', 'zh-CN': '中文', 'ru-RU': 'RU', 'ar-SA': 'AR', 'hi-IN': 'HI' }[i18n.locale] || 'EN'}</span>
+                  <span class="material-icons-round text-sm opacity-50 ml-0.5">expand_more</span>
+                </button>
+                <!-- Dropdown -->
+                <div id="langDropdownMenu" class="absolute top-full right-0 mt-2 w-32 bg-[#0b1120] border border-white/10 rounded-xl shadow-xl overflow-hidden hidden transition-all origin-top-right z-50">
+                    <button data-lang="en-US" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2">English</button>
+                    <button data-lang="zh-CN" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2">中文</button>
+                    <button data-lang="ru-RU" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2">Русский</button>
+                    <button data-lang="ar-SA" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2">العربية</button>
+                    <button data-lang="hi-IN" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2">हिन्दी</button>
+                </div>
+              </div>
             </nav>
 
             <!-- Mobile Menu Button -->
@@ -150,7 +161,7 @@ export const Layout = {
                 <span class="text-xl font-bold text-white tracking-tight group-hover:text-indigo-200 transition-colors">GeminiDeMark</span>
               </a>
               <p class="text-sm leading-relaxed max-w-sm text-slate-500" data-i18n="footer.desc">
-                Gemini Watermark Remover. Engineered for precision and privacy.
+                GeminiDeMark. Engineered for precision and privacy.
               </p>
             </div>
 

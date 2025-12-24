@@ -76,22 +76,43 @@ async function init() {
             initAnimations();
         }, 100);
 
-        // Delegated Language Switch Event
+        // Language Dropdown Toggle
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('#langDropdownBtn');
+            const menu = document.getElementById('langDropdownMenu');
+
+            if (btn && menu) {
+                e.stopPropagation();
+                menu.classList.toggle('hidden');
+                return;
+            }
+
+            // Language Selection
+            const langItem = e.target.closest('[data-lang]');
+            if (langItem && menu && !menu.contains(e.target.parentNode.closest('#langDropdownMenu') === null)) { // Simplify check: just check if inside menu
+                // Actually relying on bubbling. 
+            }
+        });
+
+        // Better delegated listener for Language Selection
         document.addEventListener('click', async (e) => {
-            const btn = e.target.closest('#langSwitch');
-            if (btn) {
-                const newLocale = i18n.locale === 'zh-CN' ? 'en-US' : 'zh-CN';
+            const langItem = e.target.closest('[data-lang]');
+            if (langItem) {
+                const newLocale = langItem.getAttribute('data-lang');
                 await i18n.switchLocale(newLocale);
 
-                // Update button text (Layout re-render handles full reset, but we update in-place for responsiveness)
-                // Updating only text logic to preserve icon
-                // But actually i18n.applyTranslations updates data-i18n elements. 
-                // The button usually doesn't need full re-render unless Layout.renderHeader is called.
-                // However, to match the layout.js logic:
-                const textSpan = btn.querySelector('span:last-child');
-                if (textSpan) textSpan.textContent = newLocale === 'zh-CN' ? 'EN' : '中文';
+                // Update label
+                const label = document.getElementById('currentLangLabel');
+                const labels = { 'en-US': 'EN', 'zh-CN': '中文', 'ru-RU': 'RU', 'ar-SA': 'AR', 'hi-IN': 'HI' };
+                if (label) label.textContent = labels[newLocale] || 'EN';
 
                 updateDynamicTexts();
+                document.getElementById('langDropdownMenu')?.classList.add('hidden');
+            }
+
+            // Close menu when clicking outside
+            if (!e.target.closest('#langDropdownBtn') && !e.target.closest('#langDropdownMenu')) {
+                document.getElementById('langDropdownMenu')?.classList.add('hidden');
             }
         });
 
