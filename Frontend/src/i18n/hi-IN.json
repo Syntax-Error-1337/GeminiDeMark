@@ -55,5 +55,21 @@
     "info.removed": "सफलतापूर्वक हटाया गया",
     "original.not_gemini": "⚠️ विश्लेषण अनिश्चित: छवि मेटाडेटा ज्ञात Gemini हस्ताक्षरों से मेल नहीं खाता है। दोषरहित पुनर्स्थापना भिन्न हो सकती है।",
     "original.not_original": "⚠️ आकार बदलने का पता चला: छवि संकुचित या आकार बदली हुई प्रतीत होती है। कलाकृतियां हो सकती हैं।",
-    "original.pass": "✅ सत्यापन पास: मूल Gemini हस्ताक्षर की पुष्टि की गई। दोषरहित मोड सक्रिय।"
+    "original.pass": "✅ सत्यापन पास: मूल Gemini हस्ताक्षर की पुष्टि की गई। दोषरहित मोड सक्रिय।",
+    "dashboard.title": "डैशबोर्ड",
+    "dashboard.back": "संपादक पर वापस जाएं",
+    "dashboard.plan": "योजना",
+    "dashboard.usage.title": "मासिक उपयोग",
+    "dashboard.usage.unit": "छवियां",
+    "dashboard.usage.reset": "हर महीने की {day} तारीख को रीसेट होता है",
+    "dashboard.upgrade.title": "प्रो में अपग्रेड करें",
+    "dashboard.upgrade.desc": "असीमित प्रसंस्करण और प्राथमिकता समर्थन प्राप्त करें।",
+    "dashboard.upgrade.btn": "योजनाएं देखें",
+    "dashboard.limit.reached": "आप अपनी {limit} छवियों की मासिक सीमा तक पहुँच गए हैं।",
+    "dashboard.error.load": "डैशबोर्ड डेटा लोड करने में विफल।",
+    "login.register.btn": "पंजीकरण करें",
+    "login.register.title": "खाता बनाएं",
+    "login.register.subtitle": "आज ही GeminiDeMark से जुड़ें",
+    "login.register.toggle": "क्या आपके पास पहले से एक खाता है?",
+    "login.signin.toggle": "खाते की आवश्यकता है?"
 }

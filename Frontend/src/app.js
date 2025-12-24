@@ -212,11 +212,11 @@ function setupEventListeners() {
             if (isRegisterMode) {
                 usernameField.classList.remove('hidden');
                 document.getElementById('username').required = true;
-                authBtnText.textContent = 'Register';
+                authBtnText.textContent = i18n.t('login.register.btn');
                 authBtnIcon.textContent = 'person_add';
-                document.querySelector('[data-i18n="login.title"]').textContent = 'Create Account';
-                document.querySelector('[data-i18n="login.subtitle"]').textContent = 'Join GeminiDeMark today';
-                toggleBtn.innerHTML = `Already have an account? <span class="text-indigo-400 font-bold">Sign In</span>`;
+                document.querySelector('[data-i18n="login.title"]').textContent = i18n.t('login.register.title');
+                document.querySelector('[data-i18n="login.subtitle"]').textContent = i18n.t('login.register.subtitle');
+                toggleBtn.innerHTML = `${i18n.t('login.register.toggle')} <span class="text-indigo-400 font-bold">${i18n.t('login.btn')}</span>`;
             } else {
                 usernameField.classList.add('hidden');
                 document.getElementById('username').required = false;
@@ -224,7 +224,7 @@ function setupEventListeners() {
                 authBtnIcon.textContent = 'login';
                 document.querySelector('[data-i18n="login.title"]').textContent = i18n.t('login.title') || 'Welcome Back';
                 document.querySelector('[data-i18n="login.subtitle"]').textContent = i18n.t('login.subtitle') || 'Sign in to GeminiDeMark';
-                toggleBtn.innerHTML = `Need an account? <span class="text-indigo-400 font-bold">Register</span>`;
+                toggleBtn.innerHTML = `${i18n.t('login.signin.toggle')} <span class="text-indigo-400 font-bold">${i18n.t('login.register.btn')}</span>`;
             }
             formError.classList.add('hidden');
             formSuccess.classList.add('hidden');
@@ -317,7 +317,7 @@ async function processSingle(item) {
     // Check Limit
     const allowed = await Dashboard.verifyLimit();
     if (!allowed) {
-        alert("Monthly Limit Reached");
+        // limit reached alert handled in verifyLimit
         return;
     }
 

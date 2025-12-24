@@ -56,5 +56,21 @@
     "info.removed": "تمت الإزالة بنجاح",
     "original.not_gemini": "⚠️ التحليل غير مؤكد: بيانات الصورة لا تتطابق مع توقيعات Gemini المعروفة. قد تختلف جودة الاستعادة.",
     "original.not_original": "⚠️ تم اكتشاف تغيير الحجم: يبدو أن الصورة مضغوطة أو تم تغيير حجمها. قد تظهر شوائب.",
-    "original.pass": "✅ تم التحقق: تأكيد توقيع Gemini الأصلي. وضع الاستعادة بدون فقدان نشط."
+    "original.pass": "✅ تم التحقق: تأكيد توقيع Gemini الأصلي. وضع الاستعادة بدون فقدان نشط.",
+    "dashboard.title": "لوحة القيادة",
+    "dashboard.back": "العودة للمحرر",
+    "dashboard.plan": "خطة",
+    "dashboard.usage.title": "الاستخدام الشهري",
+    "dashboard.usage.unit": "صور",
+    "dashboard.usage.reset": "إعادة تعيين في يوم {day} من كل شهر",
+    "dashboard.upgrade.title": "الترقية إلى برو",
+    "dashboard.upgrade.desc": "احصل على معالجة غير محدودة ودعم ذو أولوية.",
+    "dashboard.upgrade.btn": "عرض الخطط",
+    "dashboard.limit.reached": "لقد وصلت إلى الحد الشهري الذي يبلغ {limit} صورة.",
+    "dashboard.error.load": "فشل تحميل بيانات لوحة القيادة.",
+    "login.register.btn": "تسجيل",
+    "login.register.title": "إنشاء حساب",
+    "login.register.subtitle": "انضم إلى GeminiDeMark اليوم",
+    "login.register.toggle": "هل لديك حساب بالفعل؟",
+    "login.signin.toggle": "تحتاج حساب؟"
 }

@@ -55,5 +55,21 @@
     "info.removed": "Успешно удалено",
     "original.not_gemini": "⚠️ Анализ неточен: Метаданные изображения не совпадают с подписями Gemini.",
     "original.not_original": "⚠️ Обнаружено изменение размера: Возможно появление артефактов.",
-    "original.pass": "✅ Верификация пройдена: Подтвреждена оригинальная подпись Gemini. Режим без потерь активен."
+    "original.pass": "✅ Верификация пройдена: Подтвреждена оригинальная подпись Gemini. Режим без потерь активен.",
+    "dashboard.title": "Панель управления",
+    "dashboard.back": "Назад в редактор",
+    "dashboard.plan": "ПЛАН",
+    "dashboard.usage.title": "Использование за месяц",
+    "dashboard.usage.unit": "изображений",
+    "dashboard.usage.reset": "Сброс {day}-го числа каждого месяца",
+    "dashboard.upgrade.title": "Обновить до Pro",
+    "dashboard.upgrade.desc": "Получите неограниченную обработку и приоритетную поддержку.",
+    "dashboard.upgrade.btn": "Посмотреть планы",
+    "dashboard.limit.reached": "Вы достигли месячного лимита в {limit} изображений.",
+    "dashboard.error.load": "Не удалось загрузить данные панели управления.",
+    "login.register.btn": "Регистрация",
+    "login.register.title": "Создать аккаунт",
+    "login.register.subtitle": "Присоединяйтесь к GeminiDeMark сегодня",
+    "login.register.toggle": "Уже есть аккаунт?",
+    "login.signin.toggle": "Нужен аккаунт?"
 }

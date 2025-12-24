@@ -62,9 +62,9 @@ export const Dashboard = {
         container.innerHTML = `
             <div class="max-w-4xl mx-auto px-4 py-12">
                 <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-3xl font-bold text-white">Dashboard</h2>
-                    <button onclick="window.location.reload()" class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-300 text-sm transition-colors">
-                        Back to Editor
+                    <h2 class="text-3xl font-bold text-white" data-i18n="dashboard.title">${i18n.t('dashboard.title')}</h2>
+                    <button onclick="window.location.reload()" class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-300 text-sm transition-colors" data-i18n="dashboard.back">
+                        ${i18n.t('dashboard.back')}
                     </button>
                 </div>
 
@@ -78,7 +78,7 @@ export const Dashboard = {
                             <h3 class="text-2xl font-bold text-white mb-1">${user.username}</h3>
                             <p class="text-slate-400 text-sm">${user.email}</p>
                             <div class="mt-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                                ${user.role.toUpperCase()} PLAN
+                                ${user.role.toUpperCase()} ${i18n.t('dashboard.plan')}
                             </div>
                         </div>
                     </div>
@@ -91,30 +91,27 @@ export const Dashboard = {
                         <div class="absolute top-0 right-0 p-32 bg-${color}-500/10 blur-3xl rounded-full pointer-events-none group-hover:bg-${color}-500/20 transition-all"></div>
                         
                         <div class="relative z-10">
-                            <h4 class="text-slate-400 text-sm font-medium mb-4 uppercase tracking-wider">Monthly Usage</h4>
+                            <h4 class="text-slate-400 text-sm font-medium mb-4 uppercase tracking-wider" data-i18n="dashboard.usage.title">${i18n.t('dashboard.usage.title')}</h4>
                             <div class="flex items-end gap-2 mb-4">
                                 <span class="text-4xl font-bold text-white">${user.monthlyUsage}</span>
-                                <span class="text-xl text-slate-500 mb-1">/ ${user.monthlyLimit} images</span>
+                                <span class="text-xl text-slate-500 mb-1">/ ${user.monthlyLimit} ${i18n.t('dashboard.usage.unit')}</span>
                             </div>
 
                             <!-- Progress Bar -->
                             <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
                                 <div class="h-full bg-${color}-500 transition-all duration-1000" style="width: ${percentage}%"></div>
                             </div>
-                            <p class="text-xs text-slate-500 mt-3">Resets on ${new Date(user.createdAt).getDate()}th of every month</p>
+                            <p class="text-xs text-slate-500 mt-3">${i18n.t('dashboard.usage.reset', { day: new Date(user.createdAt).getDate() })}</p>
                         </div>
                     </div>
 
                     <!-- Upgrade Call -->
                     <div class="glass-card bg-gradient-to-br from-indigo-900/40 to-purple-900/40 border border-indigo-500/20 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
                         <span class="material-icons-round text-4xl text-indigo-400 mb-3">diamond</span>
-                        <h4 class="text-white font-bold text-lg mb-2">Upgrade to Pro</h4>
-                        <p class="text-slate-400 text-sm mb-6">Get unlimited processing and priority support.</p>
-                        <button class="px-6 py-2 bg-white text-indigo-900 font-bold rounded-lg hover:bg-indigo-50 transition-colors">
-                            View Plans
-                        </button>
-                        <button onclick="window.Dashboard.trackSuccess()" class="mt-4 text-xs text-indigo-300 underline">
-                            Test Tracking (Debug)
+                        <h4 class="text-white font-bold text-lg mb-2" data-i18n="dashboard.upgrade.title">${i18n.t('dashboard.upgrade.title')}</h4>
+                        <p class="text-slate-400 text-sm mb-6" data-i18n="dashboard.upgrade.desc">${i18n.t('dashboard.upgrade.desc')}</p>
+                        <button class="px-6 py-2 bg-white text-indigo-900 font-bold rounded-lg hover:bg-indigo-50 transition-colors" data-i18n="dashboard.upgrade.btn">
+                            ${i18n.t('dashboard.upgrade.btn')}
                         </button>
                     </div>
                 </div>
@@ -134,7 +131,7 @@ export const Dashboard = {
             const data = await response.json();
 
             if (data.monthlyUsage >= data.monthlyLimit) {
-                alert("You have reached your monthly limit of " + data.monthlyLimit + " images.");
+                alert(i18n.t('dashboard.limit.reached', { limit: data.monthlyLimit }));
                 return false;
             }
             return true;
@@ -154,10 +151,8 @@ export const Dashboard = {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
                 }
             });
-            console.log("[Dashboard] Track usage response status:", response.status);
 
             if (response.ok) {
                 const data = await response.json();

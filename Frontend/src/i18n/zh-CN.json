@@ -56,5 +56,21 @@
   "info.removed": "成功移除",
   "original.not_gemini": "⚠️ 分析不确定：图像元数据不匹配已知的 Gemini 签名。无损修复效果可能会有差异。",
   "original.not_original": "⚠️ 检测到重采样：图像似乎被压缩或调整过大小。可能会在边缘产生伪影。",
-  "original.pass": "✅ 验证通过：确认原始 Gemini 签名。无损修复模式已激活。"
+  "original.pass": "✅ 验证通过：确认原始 Gemini 签名。无损修复模式已激活。",
+  "dashboard.title": "仪表盘",
+  "dashboard.back": "返回编辑器",
+  "dashboard.plan": "计划",
+  "dashboard.usage.title": "本月使用量",
+  "dashboard.usage.unit": "张图片",
+  "dashboard.usage.reset": "每月 {day} 日重置",
+  "dashboard.upgrade.title": "升级到专业版",
+  "dashboard.upgrade.desc": "无限制处理和优先支持。",
+  "dashboard.upgrade.btn": "查看计划",
+  "dashboard.limit.reached": "您已达到每月 {limit} 张图片的限额。",
+  "dashboard.error.load": "加载仪表盘数据失败。",
+  "login.register.btn": "注册",
+  "login.register.title": "创建账户",
+  "login.register.subtitle": "立即加入 GeminiDeMark",
+  "login.register.toggle": "已有账户？",
+  "login.signin.toggle": "需要账户？"
 }

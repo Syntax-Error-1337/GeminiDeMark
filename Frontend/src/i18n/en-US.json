@@ -56,5 +56,21 @@
   "info.removed": "Successfully Removed",
   "original.not_gemini": "⚠️ Analysis Indeterminate: Image metadata does not match known Gemini signatures. Lossless restoration may vary.",
   "original.not_original": "⚠️ Resizing Detected: Image appears to be compressed or resized. Artifacts may occur.",
-  "original.pass": "✅ Verification Passed: Original Gemini signature confirmed. Lossless mode active."
+  "original.pass": "✅ Verification Passed: Original Gemini signature confirmed. Lossless mode active.",
+  "dashboard.title": "Dashboard",
+  "dashboard.back": "Back to Editor",
+  "dashboard.plan": "PLAN",
+  "dashboard.usage.title": "Monthly Usage",
+  "dashboard.usage.unit": "images",
+  "dashboard.usage.reset": "Resets on {day}th of every month",
+  "dashboard.upgrade.title": "Upgrade to Pro",
+  "dashboard.upgrade.desc": "Get unlimited processing and priority support.",
+  "dashboard.upgrade.btn": "View Plans",
+  "dashboard.limit.reached": "You have reached your monthly limit of {limit} images.",
+  "dashboard.error.load": "Failed to load dashboard data.",
+  "login.register.btn": "Register",
+  "login.register.title": "Create Account",
+  "login.register.subtitle": "Join GeminiDeMark today",
+  "login.register.toggle": "Already have an account?",
+  "login.signin.toggle": "Need an account?"
 }
