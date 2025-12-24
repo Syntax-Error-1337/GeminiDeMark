@@ -1,5 +1,6 @@
 import i18n from '../i18n.js';
 import { Auth } from './auth.js';
+import { Dashboard } from './dashboard.js';
 
 export const Layout = {
   init() {
@@ -72,6 +73,10 @@ export const Layout = {
             <!-- Desktop Nav -->
             <nav class="hidden md:flex items-center gap-6">
               ${isLoggedIn ? `
+                <button onclick="window.Dashboard.show()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-all">
+                  <span class="material-icons-round text-lg">dashboard</span>
+                  Dashboard
+                </button>
                 <button onclick="window.Auth.logout()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-all">
                   <span class="material-icons-round text-lg">logout</span>
                   Sign Out
@@ -136,6 +141,7 @@ export const Layout = {
 
     // Make Auth available globally for inline onclick handlers
     if (!window.Auth) window.Auth = Auth;
+    if (!window.Dashboard) window.Dashboard = Dashboard;
   },
 
   renderFooter() {

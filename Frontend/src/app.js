@@ -1,6 +1,7 @@
 import { WatermarkEngine } from './core/watermarkEngine.js';
 import { Layout } from './core/layout.js';
 import { Auth } from './core/auth.js';
+import { Dashboard } from './core/dashboard.js';
 import { AuroraBackground } from './core/bg-animation.js';
 import i18n from './i18n.js';
 import { loadImage, checkOriginal, getOriginalStatus, setStatusMessage, showLoading, hideLoading } from './utils.js';
@@ -188,19 +189,73 @@ function setupEventListeners() {
     resetBtn.addEventListener('click', reset);
 
     // Login Form Listener
+    // Login/Register Logic
     const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        console.log('Login form listener attached');
-        loginForm.addEventListener('submit', (e) => {
-            console.log('Login form submitted via JS');
-            e.preventDefault();
-            const username = loginForm.username.value;
-            const password = loginForm.password.value;
-            console.log('Attempting login for:', username);
-            Auth.login(username, password);
+    const toggleBtn = document.getElementById('toggle-auth-mode');
+    const usernameField = document.getElementById('username-field');
+    const authBtnText = document.getElementById('auth-btn-text');
+    const authBtnIcon = document.getElementById('auth-btn-icon');
+    const formError = document.getElementById('form-error');
+    const formSuccess = document.getElementById('form-success');
+    let isRegisterMode = false;
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            isRegisterMode = !isRegisterMode;
+            if (isRegisterMode) {
+                usernameField.classList.remove('hidden');
+                document.getElementById('username').required = true;
+                authBtnText.textContent = 'Register';
+                authBtnIcon.textContent = 'person_add';
+                document.querySelector('[data-i18n="login.title"]').textContent = 'Create Account';
+                document.querySelector('[data-i18n="login.subtitle"]').textContent = 'Join GeminiDeMark today';
+                toggleBtn.innerHTML = `Already have an account? <span class="text-indigo-400 font-bold">Sign In</span>`;
+            } else {
+                usernameField.classList.add('hidden');
+                document.getElementById('username').required = false;
+                authBtnText.textContent = i18n.t('login.btn') || 'Sign In';
+                authBtnIcon.textContent = 'login';
+                document.querySelector('[data-i18n="login.title"]').textContent = i18n.t('login.title') || 'Welcome Back';
+                document.querySelector('[data-i18n="login.subtitle"]').textContent = i18n.t('login.subtitle') || 'Sign in to GeminiDeMark';
+                toggleBtn.innerHTML = `Need an account? <span class="text-indigo-400 font-bold">Register</span>`;
+            }
+            formError.classList.add('hidden');
+            formSuccess.classList.add('hidden');
         });
-    } else {
-        console.error('Login form ID not found in DOM');
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Form Submitted! Register Mode:", isRegisterMode);
+
+            formError.classList.add('hidden');
+            formSuccess.classList.add('hidden');
+
+            const email = loginForm.email.value;
+            const password = loginForm.password.value;
+            const username = loginForm.username.value;
+
+            if (isRegisterMode) {
+                const result = await Auth.register(username, email, password);
+                if (result.success) {
+                    formSuccess.textContent = result.message;
+                    formSuccess.classList.remove('hidden');
+                    // Switch to login
+                    setTimeout(() => toggleBtn.click(), 2000);
+                } else {
+                    formError.textContent = result.message;
+                    formError.classList.remove('hidden');
+                }
+            } else {
+                const result = await Auth.login(email, password);
+                if (!result.success) {
+                    formError.textContent = result.message;
+                    formError.classList.remove('hidden');
+                }
+                // If success, Auth.login triggers 'auth:login' event which updates UI globally
+            }
+        });
     }
 }
 
@@ -326,6 +381,14 @@ async function processQueue() {
     for (const item of imageQueue) {
         if (item.status !== 'pending') continue;
 
+        // Check Limit
+        const allowed = await Dashboard.verifyLimit();
+        if (!allowed) {
+            item.status = 'error';
+            updateStatus(item.id, "Monthly Limit Reached");
+            continue;
+        }
+
         item.status = 'processing';
         updateStatus(item.id, i18n.t('status.processing'));
 
@@ -337,6 +400,10 @@ async function processQueue() {
             document.getElementById(`result-${item.id}`).src = URL.createObjectURL(blob);
 
             item.status = 'completed';
+
+            // Track Usage
+            await Dashboard.trackSuccess();
+
             const watermarkInfo = engine.getWatermarkInfo(item.originalImg.width, item.originalImg.height);
             const { is_google, is_original } = await checkOriginal(item.originalImg);
             const originalStatus = getOriginalStatus({ is_google, is_original });

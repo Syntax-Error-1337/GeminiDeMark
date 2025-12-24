@@ -39,6 +39,7 @@
     "login.subtitle": "تسجيل الدخول إلى GeminiDeMark",
     "login.username.label": "اسم المستخدم",
     "login.username.placeholder": "أدخل اسم المستخدم",
+    "login.email.label": "البريد الإلكتروني",
     "login.password.label": "كلمة المرور",
     "login.password.placeholder": "أدخل كلمة المرور",
     "login.btn": "تسجيل الدخول",

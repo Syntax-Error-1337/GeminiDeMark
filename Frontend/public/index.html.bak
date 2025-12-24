@@ -175,7 +175,7 @@
     <canvas id="bg-canvas" class="absolute inset-0 w-full h-full -z-20"></canvas>
 
     <div
-      class="glass-card w-full max-w-md bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/10 relative z-10">
+      class="glass-card w-full max-w-md bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/10 relative z-10 opacity-0 translate-y-4">
       <div class="text-center mb-8">
         <div
           class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-emerald-500 mb-4 shadow-lg shadow-indigo-500/20 animate-float">
@@ -225,19 +225,17 @@
   </div>
 
   <div id="app-content" class="hidden">
-    <!-- Dashboard View Container -->
-    <div id="dashboard-view" class="min-h-screen pt-20 hidden"></div>
-
     <main class="flex-grow relative overflow-hidden">
       <!-- High Performance Canvas Background -->
       <canvas id="hero-canvas" class="absolute inset-0 w-full h-full -z-20"></canvas>
 
       <section class="relative pt-16 pb-12 lg:pt-24 lg:pb-20 text-center px-4">
-        <h2 class="hero-title font-extrabold text-white mb-6 md:text-6xl text-4xl tracking-tight drop-shadow-2xl"
+        <h2
+          class="hero-title font-extrabold text-white mb-6 md:text-6xl text-4xl tracking-tight drop-shadow-2xl opacity-0 translate-y-4"
           data-i18n="main.title">
           Gemini AI Watermark Removal
         </h2>
-        <p class="hero-subtitle text-base md:text-lg text-slate-200/80 max-w-2xl mx-auto mb-12 font-medium tracking-wide"
+        <p class="hero-subtitle text-base md:text-lg text-slate-200/80 max-w-2xl mx-auto mb-12 font-medium tracking-wide opacity-0 translate-y-4"
           data-i18n="main.subtitle">
           Based on reverse alpha blending algorithm, pure browser-side processing, Free, Fast, and Lossless
         </p>

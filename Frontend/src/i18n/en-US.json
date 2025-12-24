@@ -39,6 +39,7 @@
   "login.subtitle": "Sign in to GeminiDeMark",
   "login.username.label": "Username",
   "login.username.placeholder": "Enter username",
+  "login.email.label": "Email",
   "login.password.label": "Password",
   "login.password.placeholder": "Enter password",
   "login.btn": "Sign In",

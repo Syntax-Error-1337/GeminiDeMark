@@ -39,6 +39,7 @@
   "login.subtitle": "登录到 GeminiDeMark",
   "login.username.label": "用户名",
   "login.username.placeholder": "请输入用户名",
+  "login.email.label": "邮箱",
   "login.password.label": "密码",
   "login.password.placeholder": "请输入密码",
   "login.btn": "立即登录",
