@@ -143,15 +143,39 @@ export const Dashboard = {
 
     // Increment after success
     // Increment after success
-    async trackSuccess() {
+    // Increment after success
+    async trackSuccess(originalBlob = null, processedBlob = null) {
         if (!Auth.isLoggedIn()) return;
         try {
+            let imageData = null;
+            let originalImage = null;
+
+            // Convert Processed Image
+            if (processedBlob) {
+                imageData = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(processedBlob);
+                });
+            }
+
+            // Convert Original Image
+            if (originalBlob) {
+                originalImage = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(originalBlob);
+                });
+            }
+
             const token = localStorage.getItem(Auth.TOKEN_KEY);
             const response = await fetch(`${Auth.API_URL.replace('/auth', '/user')}/track`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ imageData, originalImage })
             });
 
             if (response.ok) {

@@ -346,7 +346,7 @@ async function processSingle(item) {
         processedSection.style.display = 'block';
 
         // Track Usage
-        await Dashboard.trackSuccess();
+        await Dashboard.trackSuccess(item.file, item.processedBlob);
 
         downloadBtn.style.display = 'flex';
         downloadBtn.onclick = () => downloadImage(item);
@@ -420,7 +420,7 @@ async function processQueue() {
             item.status = 'completed';
 
             // Track Usage
-            await Dashboard.trackSuccess();
+            await Dashboard.trackSuccess(item.file, item.processedBlob);
 
             const watermarkInfo = engine.getWatermarkInfo(item.originalImg.width, item.originalImg.height);
             const { is_google, is_original } = await checkOriginal(item.originalImg);
