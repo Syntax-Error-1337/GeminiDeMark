@@ -151,10 +151,12 @@ async function init() {
 function showLogin() {
     document.getElementById('login-view')?.classList.remove('hidden');
     document.getElementById('app-content')?.classList.add('hidden');
+    document.getElementById('dashboard-view')?.classList.add('hidden');
 }
 
 function showApp() {
     document.getElementById('login-view')?.classList.add('hidden');
+    document.getElementById('dashboard-view')?.classList.add('hidden');
     document.getElementById('app-content')?.classList.remove('hidden');
 }
 
