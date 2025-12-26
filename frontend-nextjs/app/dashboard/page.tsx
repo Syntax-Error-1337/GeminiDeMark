@@ -62,17 +62,27 @@ export default function DashboardPage() {
     if (percentage >= 100) color = 'red';
 
     const handleViewImage = async (id: number) => {
-        // Here we would ideally fetch the images securely.
-        // For now, we construct the URLs assuming the backend serves them or we use the API path.
-        // The original dashboard used fetch blob.
-
-        // Let's mock the fetch for now or implement the secure fetch logic if we have time.
-        // The DashboardService doesn't have image fetch yet.
         setSelectedImageId(id);
 
-        // TODO: Implement secure image fetching
-        // For UI demo:
-        // setModalImages({ original: '...', processed: '...' });
+        try {
+            const [originalBlob, processedBlob] = await Promise.all([
+                DashboardService.fetchImageBlob(id, 'original'),
+                DashboardService.fetchImageBlob(id, 'processed')
+            ]);
+
+            setModalImages({
+                original: originalBlob ? URL.createObjectURL(originalBlob) : '',
+                processed: processedBlob ? URL.createObjectURL(processedBlob) : ''
+            });
+        } catch (error) {
+            console.error("Failed to load images", error);
+            setSelectedImageId(null);
+        }
+    };
+
+    const closeModal = () => {
+        setSelectedImageId(null);
+        setModalImages(null);
     };
 
     if (authLoading || loading) {
@@ -236,6 +246,80 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Image Viewer Modal */}
+            {selectedImageId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-[#151f32] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl overflow-hidden relative animate-scale-up">
+                        {/* Modal Header */}
+                        <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-white/5">
+                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                <span className="material-icons-round text-indigo-400">image</span>
+                                Image Details
+                            </h3>
+                            <button onClick={closeModal} className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white">
+                                <span className="material-icons-round text-lg">close</span>
+                            </button>
+                        </div>
+
+                        {/* Modal Content */}
+                        <div className="p-6">
+                            {!modalImages ? (
+                                <div className="flex flex-col items-center justify-center py-20 gap-4">
+                                    <div className="w-10 h-10 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
+                                    <p className="text-slate-400 text-sm">Loading images...</p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Original Image */}
+                                    <div className="space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-sm font-bold text-slate-300">Original Source</span>
+                                            <span className="text-xs px-2 py-0.5 rounded bg-white/5 text-slate-500 border border-white/5">Before</span>
+                                        </div>
+                                        <div className="aspect-[4/3] bg-black/40 rounded-xl overflow-hidden border border-white/10 relative flex items-center justify-center group">
+                                            {modalImages.original ? (
+                                                // eslint-disable-next-line @next/next/no-img-element
+                                                <img src={modalImages.original} alt="Original" className="max-w-full max-h-full object-contain" />
+                                            ) : (
+                                                <p className="text-slate-500 text-sm">Not available</p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Processed Image */}
+                                    <div className="space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-sm font-bold text-emerald-400">Restored Result</span>
+                                            <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">After</span>
+                                        </div>
+                                        <div className="aspect-[4/3] bg-black/40 rounded-xl overflow-hidden border border-emerald-500/20 relative flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.1)] group">
+                                            {modalImages.processed ? (
+                                                // eslint-disable-next-line @next/next/no-img-element
+                                                <img src={modalImages.processed} alt="Processed" className="max-w-full max-h-full object-contain" />
+                                            ) : (
+                                                <p className="text-slate-500 text-sm">Not available</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Modal Footer */}
+                        <div className="bg-[#0f172a] px-6 py-4 border-t border-white/5 flex justify-end gap-3">
+                            {modalImages?.processed && (
+                                <Button onClick={() => window.open(modalImages.processed, '_blank')} variant="default" className="bg-indigo-600 hover:bg-indigo-500">
+                                    <span className="material-icons-round mr-2 text-sm">download</span> Download
+                                </Button>
+                            )}
+                            <Button onClick={closeModal} variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/5">
+                                Close
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

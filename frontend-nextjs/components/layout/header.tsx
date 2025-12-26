@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/auth-provider';
 import { useI18n } from '@/components/providers/i18n-provider';
+import { useTheme } from 'next-themes';
 import { type Locale } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 
@@ -22,9 +23,13 @@ export function Header() {
     ];
 
     const currentLangLabel = languages.find(l => l.code === locale)?.label || 'English';
+    const { theme, setTheme } = useTheme();
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => setMounted(true), []);
 
     return (
-        <header className="fixed top-0 inset-x-0 z-50 bg-[#050914]/80 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
+        <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border transition-all duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
                     {/* Logo */}
@@ -36,7 +41,7 @@ export function Header() {
                                 </svg>
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-white tracking-tight group-hover:text-indigo-200 transition-colors">GeminiDeMark</span>
+                                <span className="text-lg font-bold text-foreground tracking-tight group-hover:text-primary transition-colors">GeminiDeMark</span>
                             </div>
                         </Link>
                     </div>
@@ -45,11 +50,11 @@ export function Header() {
                     <nav className="hidden md:flex items-center gap-6">
                         {isLoggedIn ? (
                             <>
-                                <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-all">
+                                <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/80 rounded-full transition-all">
                                     <span className="material-icons-round text-lg">dashboard</span>
                                     Dashboard
                                 </Link>
-                                <button onClick={logout} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-all">
+                                <button onClick={logout} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/80 rounded-full transition-all">
                                     <span className="material-icons-round text-lg">logout</span>
                                     Sign Out
                                 </button>
@@ -65,13 +70,25 @@ export function Header() {
                             </Button>
                         )}
 
-                        <div className="h-6 w-px bg-white/10 mx-1"></div>
+                        <div className="h-6 w-px bg-border mx-1"></div>
+
+                        {/* Theme Toggle */}
+                        {mounted && (
+                            <button
+                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="flex items-center justify-center w-8 h-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all"
+                            >
+                                <span className="material-icons-round text-xl">
+                                    {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+                                </span>
+                            </button>
+                        )}
 
                         <div className="relative">
                             <button
                                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
                                 onBlur={() => setTimeout(() => setIsLangMenuOpen(false), 200)}
-                                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-300 bg-white/5 hover:bg-white/10 hover:text-white border border-white/5 rounded-full transition-all"
+                                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-muted-foreground bg-secondary/50 hover:bg-secondary hover:text-foreground border border-border rounded-full transition-all"
                             >
                                 <span className="material-icons-round text-sm opacity-70">translate</span>
                                 <span>{currentLangLabel}</span>
@@ -80,12 +97,12 @@ export function Header() {
 
                             {/* Dropdown */}
                             {isLangMenuOpen && (
-                                <div className="absolute top-full right-0 mt-2 w-32 bg-[#0b1120] border border-white/10 rounded-xl shadow-xl overflow-hidden transition-all origin-top-right z-50">
+                                <div className="absolute top-full right-0 mt-2 w-32 bg-popover border border-border rounded-xl shadow-xl overflow-hidden transition-all origin-top-right z-50">
                                     {languages.map(lang => (
                                         <button
                                             key={lang.code}
                                             onClick={() => switchLocale(lang.code)}
-                                            className="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2"
+                                            className="w-full text-left px-4 py-2.5 text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors flex items-center gap-2"
                                         >
                                             {lang.label}
                                         </button>
@@ -99,7 +116,7 @@ export function Header() {
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 focus:outline-none transition-colors"
+                            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none transition-colors"
                         >
                             <span className="material-icons-round text-2xl">menu</span>
                         </button>
@@ -108,21 +125,36 @@ export function Header() {
             </div>
 
             {/* Mobile Menu */}
-            <div className={`md:hidden bg-[#050914]/95 backdrop-blur-xl border-t border-white/5 overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className={`md:hidden bg-background/95 backdrop-blur-xl border-t border-border overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
                 <div className="px-4 pt-2 pb-6 space-y-1 shadow-lg">
+                    {/* Mobile Theme Toggle */}
+                    <div className="flex items-center justify-between px-3 py-3 text-base font-medium text-foreground">
+                        <span>Theme</span>
+                        {mounted && (
+                            <button
+                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/50"
+                            >
+                                <span className="material-icons-round text-sm">
+                                    {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+                                </span>
+                                <span className="text-sm capitalize">{theme}</span>
+                            </button>
+                        )}
+                    </div>
                     {isLoggedIn ? (
                         <>
-                            <Link href="/" className="flex items-center px-3 py-3 rounded-lg text-base font-medium text-white bg-white/5">
+                            <Link href="/" className="flex items-center px-3 py-3 rounded-lg text-base font-medium text-foreground bg-secondary/20">
                                 <span className="material-icons-round mr-3">home</span>
                                 Home
                             </Link>
-                            <button onClick={logout} className="w-full flex items-center px-3 py-3 rounded-lg text-base font-medium text-red-400 hover:bg-white/5 hover:text-red-300">
+                            <button onClick={logout} className="w-full flex items-center px-3 py-3 rounded-lg text-base font-medium text-destructive hover:bg-secondary/20">
                                 <span className="material-icons-round mr-3">logout</span>
                                 Sign Out
                             </button>
                         </>
                     ) : (
-                        <Button className="w-full flex items-center px-3 py-3 rounded-lg text-base font-medium text-white hover:bg-white/5 justify-start" variant="ghost">
+                        <Button className="w-full flex items-center px-3 py-3 rounded-lg text-base font-medium text-foreground hover:bg-secondary/20 justify-start" variant="ghost">
                             <span className="material-icons-round mr-3">login</span>
                             Sign In
                         </Button>

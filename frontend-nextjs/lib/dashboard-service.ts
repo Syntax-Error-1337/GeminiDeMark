@@ -77,5 +77,17 @@ export const DashboardService = {
 
         if (!response.ok) throw new Error('Failed to track usage');
         return response.json();
+    },
+
+    async fetchImageBlob(logId: number, type: 'original' | 'processed'): Promise<Blob | null> {
+        const token = Auth.getToken();
+        if (!token) return null;
+
+        const response = await fetch(`${API_BASE_URL}/dashboard/image/${logId}/${type}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) return null;
+        return response.blob();
     }
 };

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 interface AuroraBackgroundProps {
     className?: string;
@@ -9,6 +10,7 @@ interface AuroraBackgroundProps {
 
 export function AuroraBackground({ className }: AuroraBackgroundProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const { theme } = useTheme();
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -21,18 +23,28 @@ export function AuroraBackground({ className }: AuroraBackgroundProps) {
         let height = window.innerHeight;
         let animationFrameId: number;
 
+        // Configuration depends on theme
+        const isDark = theme === 'dark';
+
         const config = {
             orbCount: 5,
             minRadius: 300,
             maxRadius: 600,
             speed: 0.5,
-            colors: [
-                [15, 23, 42],    // Slate 900 (Dark Base)
+            colors: isDark ? [
+                [15, 23, 42],    // Slate 900
                 [17, 94, 89],    // Teal 800
                 [159, 18, 57],   // Rose 800
                 [49, 46, 129],   // Indigo 900
                 [6, 78, 59]      // Emerald 900
-            ]
+            ] : [
+                [248, 250, 252], // Slate 50
+                [204, 251, 241], // Teal 100
+                [254, 226, 226], // Red 100
+                [224, 231, 255], // Indigo 100
+                [209, 250, 229]  // Emerald 100
+            ],
+            background: isDark ? '#0f172a' : '#f8fafc' // Slate 900 vs Slate 50
         };
 
         let orbs: any[] = [];
@@ -59,7 +71,7 @@ export function AuroraBackground({ className }: AuroraBackgroundProps) {
         };
 
         const animate = () => {
-            ctx.fillStyle = '#0f172a';
+            ctx.fillStyle = config.background;
             ctx.fillRect(0, 0, width, height);
 
             orbs.forEach(orb => {
@@ -74,7 +86,13 @@ export function AuroraBackground({ className }: AuroraBackgroundProps) {
                 gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.5)`);
                 gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
 
-                ctx.globalCompositeOperation = 'screen';
+                ctx.globalCompositeOperation = 'screen'; // 'screen' works well for dark mode. For light, maybe 'multiply' or 'overlay'?
+                // For simplicity, let's keep 'screen' for dark, and maybe 'multiply' for light?
+                // Actually 'screen' lightens. 'multiply' darkens.
+                if (!isDark) {
+                    ctx.globalCompositeOperation = 'multiply';
+                }
+
                 ctx.fillStyle = gradient;
                 ctx.beginPath();
                 ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
@@ -95,7 +113,7 @@ export function AuroraBackground({ className }: AuroraBackgroundProps) {
             window.removeEventListener('resize', resize);
             cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, [theme]); // Re-run effect when theme changes
 
     return (
         <canvas

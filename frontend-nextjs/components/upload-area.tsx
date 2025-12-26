@@ -60,9 +60,9 @@ export function UploadArea({ onFilesSelected }: UploadAreaProps) {
                 {/* Glow Effect */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 via-purple-500 to-rose-500 rounded-3xl blur opacity-30 group-hover:opacity-75 transition duration-500"></div>
 
-                <div className="relative bg-white/10 backdrop-blur-2xl rounded-2xl border border-white/20 p-2 md:p-4 shadow-2xl overflow-hidden">
+                <div className="relative bg-card/80 backdrop-blur-2xl rounded-2xl border border-border p-2 md:p-4 shadow-2xl overflow-hidden">
                     {/* Shine Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
                     <div
                         onClick={handleClick}
@@ -71,20 +71,20 @@ export function UploadArea({ onFilesSelected }: UploadAreaProps) {
                         onDrop={handleDrop}
                         className={cn(
                             "relative flex flex-col items-center justify-center w-full h-[300px] md:h-[400px] border-2 border-dashed rounded-xl transition-all cursor-pointer group-hover:shadow-[inset_0_0_60px_rgba(255,255,255,0.05)]",
-                            isDragOver ? "border-white bg-white/10 scale-[1.02]" : "border-white/30 hover:border-white/60 hover:bg-white/5"
+                            isDragOver ? "border-primary bg-primary/5 scale-[1.02]" : "border-border hover:border-primary/50 hover:bg-secondary/50"
                         )}
                     >
                         <div className="flex flex-col items-center justify-center space-y-6 pointer-events-none z-10">
-                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center shadow-lg border border-white/10 backdrop-blur-sm group-hover:scale-110 group-hover:bg-white/20 transition-all duration-500 animate-float">
-                                <span className="material-icons-round text-6xl text-white drop-shadow-lg">cloud_upload</span>
+                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-secondary to-background flex items-center justify-center shadow-lg border border-border backdrop-blur-sm group-hover:scale-110 group-hover:bg-secondary transition-all duration-500 animate-float">
+                                <span className="material-icons-round text-6xl text-primary drop-shadow-lg">cloud_upload</span>
                             </div>
                             <div className="space-y-3 text-center">
-                                <p className="text-2xl md:text-3xl font-bold text-white tracking-wide drop-shadow-md">
+                                <p className="text-2xl md:text-3xl font-bold text-foreground tracking-wide drop-shadow-md">
                                     {t('upload.text') || 'Drag & Drop Image Here'}
                                 </p>
                                 <div className="flex items-center justify-center gap-2">
                                     {['JPG', 'PNG', 'WebP'].map(ext => (
-                                        <span key={ext} className="px-2 py-1 bg-white/10 rounded text-xs text-slate-200 border border-white/10">
+                                        <span key={ext} className="px-2 py-1 bg-secondary rounded text-xs text-muted-foreground border border-border">
                                             {ext}
                                         </span>
                                     ))}

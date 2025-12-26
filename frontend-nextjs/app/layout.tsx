@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"; // Using Inter to match original
 import "./globals.css";
 import { I18nProvider } from "@/components/providers/i18n-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { AuroraBackground } from "@/components/ui/aurora-background";
@@ -20,23 +21,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
       </head>
       <body
-        className={`${inter.className} bg-[#0f172a] text-gray-100 antialiased selection:bg-rose-500 selection:text-white flex flex-col min-h-screen`}
+        className={`${inter.className} bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground flex flex-col min-h-screen transition-colors duration-300`}
       >
-        <I18nProvider>
-          <AuthProvider>
-            <AuroraBackground />
-            <Header />
-            <main className="flex-grow pt-20">
-              {children}
-            </main>
-            <Footer />
-          </AuthProvider>
-        </I18nProvider>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <I18nProvider>
+            <AuthProvider>
+              <AuroraBackground />
+              <Header />
+              <main className="flex-grow pt-20">
+                {children}
+              </main>
+              <Footer />
+            </AuthProvider>
+          </I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
