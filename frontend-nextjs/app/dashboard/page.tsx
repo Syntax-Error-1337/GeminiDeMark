@@ -5,15 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/auth-provider';
 import { useI18n } from '@/components/providers/i18n-provider';
 import { DashboardService, type DashboardStats, type ConversionHistoryItem } from '@/lib/dashboard-service';
-import { formatBytes } from '@/lib/alpha-map'; // Reusing formatBytes from where I put it, or better move to utils?
-import { Button } from '@/components/ui/button'; // Assuming I put it in utils, but I put it in alpha-map by mistake? Let's check. 
-// Wait, I put it in alpha-map in the previous step? 
-// "TargetFile: .../lib/alpha-map.ts" -> Yes I did. That was a mistake. It should be in utils.ts. 
-// I will move it to utils.ts in this step or import it from there if I fix it. 
-// Let's assume I'll fix it in utils.ts or just put it here for now.
-// Actually, I'll import it from utils if I fix it, but I haven't fixed it yet.
-// I'll put a local version here to be safe and fix utils later.
-
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
@@ -48,7 +41,7 @@ export default function DashboardPage() {
         }
     }, [isLoggedIn]);
 
-    const formatBytesLocal = (bytes: number) => {
+    const formatBytes = (bytes: number) => {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -57,9 +50,6 @@ export default function DashboardPage() {
     };
 
     const percentage = stats ? Math.min(100, Math.round((stats.monthlyUsage / stats.monthlyLimit) * 100)) : 0;
-    let color = 'emerald';
-    if (percentage > 75) color = 'yellow';
-    if (percentage >= 100) color = 'red';
 
     const handleViewImage = async (id: number) => {
         setSelectedImageId(id);
@@ -88,7 +78,7 @@ export default function DashboardPage() {
     if (authLoading || loading) {
         return (
             <div className="flex min-h-screen items-center justify-center pt-20">
-                <div className="w-12 h-12 rounded-full border-4 border-white/10 border-t-indigo-500 animate-spin"></div>
+                <div className="w-12 h-12 rounded-full border-4 border-border border-t-primary animate-spin"></div>
             </div>
         );
     }
@@ -96,15 +86,17 @@ export default function DashboardPage() {
     if (!user || !stats) return null;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up min-h-screen pt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in min-h-screen pt-24">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
                 <div>
-                    <h2 className="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                        <span className="material-icons-round text-indigo-500 text-4xl">dashboard</span>
+                    <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight flex items-center gap-3">
+                        <span className="material-icons-round text-primary text-4xl">dashboard</span>
                         {t('dashboard.title') || 'Dashboard'}
-                    </h2>
-                    <p className="text-slate-400 mt-2 font-medium">Manage your subscription and view your activity</p>
+                    </h1>
+                    <p className="text-muted-foreground mt-2">
+                        {t('dashboard.subtitle') || 'Manage your subscription and view your activity'}
+                    </p>
                 </div>
                 <Button variant="outline" onClick={() => router.push('/')}>
                     <span className="material-icons-round text-sm mr-2">arrow_back</span>
@@ -114,127 +106,157 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* Left Column: Profile & Usage */}
-                <div className="lg:col-span-4 space-y-8">
+                <div className="lg:col-span-4 space-y-6">
                     {/* Profile Card */}
-                    <div className="bg-[#1e293b]/50 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-24 bg-indigo-500/10 blur-3xl rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2 group-hover:bg-indigo-500/20 transition-colors duration-700"></div>
-
-                        <div className="relative z-10 flex flex-col items-center text-center">
-                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 p-1 mb-4 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-500">
-                                <div className="w-full h-full rounded-full bg-[#0f172a] flex items-center justify-center">
-                                    <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 to-purple-400">
-                                        {user.username.charAt(0).toUpperCase()}
-                                    </span>
-                                </div>
+                    <Card variant="glass" className="p-6">
+                        <div className="flex flex-col items-center text-center">
+                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mb-4 shadow-lg">
+                                <span className="text-3xl font-bold text-primary-foreground">
+                                    {user.username.charAt(0).toUpperCase()}
+                                </span>
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-1">{user.username}</h3>
-                            <div className="flex items-center gap-2 text-slate-400 text-sm mb-4">
-                                <span className="material-icons-round text-base text-slate-500">email</span>
+                            <h3 className="text-xl font-bold text-foreground mb-1">{user.username}</h3>
+                            <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4">
+                                <span className="material-icons-round text-base">email</span>
                                 {user.email}
                             </div>
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase tracking-wide">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20 uppercase tracking-wide">
                                 <span className="material-icons-round text-xs">verified</span>
                                 {user.role.toUpperCase()} {t('dashboard.plan') || 'PLAN'}
                             </div>
                         </div>
-                    </div>
+                    </Card>
 
                     {/* Usage Card */}
-                    <div className="bg-[#1e293b]/50 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+                    <Card variant="glass" className="p-6">
                         <div className="flex items-center justify-between mb-6">
-                            <h4 className="text-slate-300 font-semibold flex items-center gap-2">
-                                <span className="material-icons-round text-indigo-400">pie_chart</span>
+                            <h4 className="text-foreground font-semibold flex items-center gap-2">
+                                <span className="material-icons-round text-primary">pie_chart</span>
                                 {t('dashboard.usage.title') || 'Monthly Usage'}
                             </h4>
                         </div>
 
                         <div className="mb-3 flex items-end justify-between">
-                            <span className="text-4xl font-bold text-white tracking-tight">{stats.monthlyUsage}</span>
-                            <span className="text-sm text-slate-400 mb-1.5 font-medium">/ {stats.monthlyLimit} credits</span>
+                            <span className="text-4xl font-bold text-foreground tracking-tight">{stats.monthlyUsage}</span>
+                            <span className="text-sm text-muted-foreground mb-1.5">
+                                / {stats.monthlyLimit} {t('dashboard.usage.unit') || 'credits'}
+                            </span>
                         </div>
 
                         {/* Progress Bar */}
-                        <div className="w-full h-4 bg-black/40 rounded-full overflow-hidden mb-3 border border-white/5">
+                        <div className="w-full h-3 bg-secondary rounded-full overflow-hidden mb-3 border border-border">
                             <div
-                                className={`h-full bg-gradient-to-r from-indigo-500 to-${color}-500 transition-all duration-1000 shadow-[0_0_15px_rgba(99,102,241,0.5)] relative`}
+                                className={cn(
+                                    "h-full transition-all duration-500",
+                                    percentage >= 100 ? "bg-destructive" :
+                                        percentage > 75 ? "bg-warning" :
+                                            "bg-primary"
+                                )}
                                 style={{ width: `${percentage}%` }}
-                            >
-                                <div className="absolute inset-0 bg-white/20 animate-[shimmer_2s_infinite]"></div>
-                            </div>
+                            />
                         </div>
-                        <p className="text-xs text-slate-500 text-right font-medium">{percentage}% Used</p>
-                    </div>
+                        <p className="text-xs text-muted-foreground text-right">
+                            {percentage}% {t('dashboard.usage.used') || 'Used'}
+                        </p>
+                    </Card>
 
                     {/* Upgrade Call */}
-                    <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-8 shadow-xl shadow-indigo-500/20 text-center relative overflow-hidden group hover:scale-[1.02] transition-transform cursor-pointer border border-white/10">
-                        <div className="absolute top-0 right-0 p-24 bg-white/10 blur-3xl rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
-
-                        <span className="material-icons-round text-4xl text-white/90 mb-4 drop-shadow-md">diamond</span>
-                        <h4 className="text-white font-bold text-xl mb-2">{t('dashboard.upgrade.title') || 'Upgrade to Pro'}</h4>
-                        <p className="text-indigo-100 text-sm mb-6 leading-relaxed opacity-90">{t('dashboard.upgrade.desc') || 'Get unlimited access and faster processing speeds.'}</p>
-                        <button className="w-full py-3 bg-white text-indigo-700 font-bold rounded-xl hover:bg-indigo-50 transition-colors text-sm shadow-lg">
+                    <Card variant="glass" className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 text-center hover:scale-[1.02] transition-transform cursor-pointer">
+                        <span className="material-icons-round text-4xl text-primary mb-4 block">diamond</span>
+                        <h4 className="text-foreground font-bold text-lg mb-2">
+                            {t('dashboard.upgrade.title') || 'Upgrade to Pro'}
+                        </h4>
+                        <p className="text-muted-foreground text-sm mb-6">
+                            {t('dashboard.upgrade.desc') || 'Get unlimited access and faster processing speeds.'}
+                        </p>
+                        <Button className="w-full" variant="default">
                             {t('dashboard.upgrade.btn') || 'Upgrade Now'}
-                        </button>
-                    </div>
+                        </Button>
+                    </Card>
                 </div>
 
                 {/* Right Column: Recent Conversions */}
                 <div className="lg:col-span-8">
-                    <div className="bg-[#1e293b]/50 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-xl h-full flex flex-col">
-                        <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
-                            <h3 className="text-lg font-bold text-white flex items-center gap-3">
-                                <span className="material-icons-round text-emerald-400">history</span>
-                                Recent Conversions
+                    <Card variant="glass" className="overflow-hidden h-full flex flex-col">
+                        <div className="p-6 border-b border-border flex justify-between items-center bg-secondary/30">
+                            <h3 className="text-lg font-bold text-foreground flex items-center gap-3">
+                                <span className="material-icons-round text-success">history</span>
+                                {t('dashboard.history.title') || 'Recent Conversions'}
                             </h3>
-                            <span className="text-xs font-bold text-slate-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">{history.length} records</span>
+                            <span className="text-xs font-medium text-muted-foreground bg-secondary px-3 py-1 rounded-full border border-border">
+                                {history.length} {t('dashboard.history.records') || 'records'}
+                            </span>
                         </div>
 
                         <div className="flex-1 overflow-x-auto">
-                            <table className="w-full text-left text-sm text-slate-400">
-                                <thead className="bg-black/20 text-slate-300 uppercase font-semibold text-xs tracking-wider">
+                            <table className="w-full text-left text-sm">
+                                <thead className="bg-secondary/50 text-foreground font-semibold text-xs tracking-wider uppercase">
                                     <tr>
                                         <th className="px-6 py-4">
-                                            <div className="flex items-center gap-2"><span className="material-icons-round text-sm text-slate-500">calendar_today</span> Date</div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="material-icons-round text-sm text-muted-foreground">calendar_today</span>
+                                                {t('dashboard.table.date') || 'Date'}
+                                            </div>
                                         </th>
                                         <th className="px-6 py-4">
-                                            <div className="flex items-center gap-2"><span className="material-icons-round text-sm text-slate-500">sd_storage</span> Size</div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="material-icons-round text-sm text-muted-foreground">sd_storage</span>
+                                                {t('dashboard.table.size') || 'Size'}
+                                            </div>
                                         </th>
                                         <th className="px-6 py-4">
-                                            <div className="flex items-center gap-2"><span className="material-icons-round text-sm text-slate-500">info</span> Status</div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="material-icons-round text-sm text-muted-foreground">info</span>
+                                                {t('dashboard.table.status') || 'Status'}
+                                            </div>
                                         </th>
-                                        <th className="px-6 py-4 text-right">Action</th>
+                                        <th className="px-6 py-4 text-right">
+                                            {t('dashboard.table.action') || 'Action'}
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-white/5">
+                                <tbody className="divide-y divide-border">
                                     {history.length > 0 ? history.map(item => (
-                                        <tr key={item.id} className="hover:bg-white/5 transition-colors group">
-                                            <td className="px-6 py-4 text-slate-300 font-medium whitespace-nowrap">
+                                        <tr key={item.id} className="hover:bg-secondary/30 transition-colors group">
+                                            <td className="px-6 py-4 text-foreground font-medium whitespace-nowrap">
                                                 {new Date(item.timestamp).toLocaleDateString()}
-                                                <span className="text-xs text-slate-500 block mt-0.5">{new Date(item.timestamp).toLocaleTimeString()}</span>
+                                                <span className="text-xs text-muted-foreground block mt-0.5">
+                                                    {new Date(item.timestamp).toLocaleTimeString()}
+                                                </span>
                                             </td>
-                                            <td className="px-6 py-4 font-mono text-xs">{formatBytesLocal(item.fileSize)}</td>
+                                            <td className="px-6 py-4 font-mono text-xs text-muted-foreground">
+                                                {formatBytes(item.fileSize)}
+                                            </td>
                                             <td className="px-6 py-4">
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]"></span>
-                                                    Completed
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-success/10 text-success border border-success/20">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-success"></span>
+                                                    {t('dashboard.status.completed') || 'Completed'}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <button onClick={() => handleViewImage(item.id)} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 hover:text-indigo-300 border border-indigo-500/20 transition-all text-xs font-bold group-hover:shadow-[0_0_15px_rgba(99,102,241,0.2)] hover:scale-105 active:scale-95">
-                                                    <span className="material-icons-round text-sm">visibility</span> View
+                                                <button
+                                                    onClick={() => handleViewImage(item.id)}
+                                                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 transition-all text-xs font-medium hover:scale-105 active:scale-95"
+                                                >
+                                                    <span className="material-icons-round text-sm">visibility</span>
+                                                    {t('dashboard.btn.view') || 'View'}
                                                 </button>
                                             </td>
                                         </tr>
                                     )) : (
                                         <tr>
-                                            <td colSpan={4} className="px-6 py-20 text-center text-slate-500">
+                                            <td colSpan={4} className="px-6 py-20 text-center">
                                                 <div className="flex flex-col items-center gap-4">
-                                                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
-                                                        <span className="material-icons-round text-3xl text-slate-600">history_toggle_off</span>
+                                                    <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center border border-border">
+                                                        <span className="material-icons-round text-3xl text-muted-foreground">history_toggle_off</span>
                                                     </div>
                                                     <div>
-                                                        <p className="text-base font-medium text-slate-400 mb-1">No conversion history found</p>
-                                                        <p className="text-xs text-slate-600">Your recent activities will appear here</p>
+                                                        <p className="text-base font-medium text-foreground mb-1">
+                                                            {t('dashboard.empty.title') || 'No conversion history found'}
+                                                        </p>
+                                                        <p className="text-xs text-muted-foreground">
+                                                            {t('dashboard.empty.subtitle') || 'Your recent activities will appear here'}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </td>
@@ -243,21 +265,25 @@ export default function DashboardPage() {
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </Card>
                 </div>
             </div>
 
             {/* Image Viewer Modal */}
             {selectedImageId && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-[#151f32] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl overflow-hidden relative animate-scale-up">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/90 backdrop-blur-sm animate-fade-in">
+                    <Card variant="glass" className="w-full max-w-5xl overflow-hidden animate-slide-up">
                         {/* Modal Header */}
-                        <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-white/5">
-                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                <span className="material-icons-round text-indigo-400">image</span>
-                                Image Details
+                        <div className="px-6 py-4 border-b border-border flex justify-between items-center bg-secondary/30">
+                            <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                                <span className="material-icons-round text-primary">image</span>
+                                {t('dashboard.modal.title') || 'Image Details'}
                             </h3>
-                            <button onClick={closeModal} className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white">
+                            <button
+                                onClick={closeModal}
+                                className="w-8 h-8 rounded-full bg-secondary hover:bg-secondary/80 flex items-center justify-center transition-colors"
+                                aria-label="Close modal"
+                            >
                                 <span className="material-icons-round text-lg">close</span>
                             </button>
                         </div>
@@ -266,23 +292,31 @@ export default function DashboardPage() {
                         <div className="p-6">
                             {!modalImages ? (
                                 <div className="flex flex-col items-center justify-center py-20 gap-4">
-                                    <div className="w-10 h-10 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
-                                    <p className="text-slate-400 text-sm">Loading images...</p>
+                                    <div className="w-10 h-10 border-2 border-border border-t-primary rounded-full animate-spin"></div>
+                                    <p className="text-muted-foreground text-sm">
+                                        {t('dashboard.modal.loading') || 'Loading images...'}
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Original Image */}
                                     <div className="space-y-3">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm font-bold text-slate-300">Original Source</span>
-                                            <span className="text-xs px-2 py-0.5 rounded bg-white/5 text-slate-500 border border-white/5">Before</span>
+                                            <span className="text-sm font-bold text-foreground">
+                                                {t('preview.original') || 'Original Source'}
+                                            </span>
+                                            <span className="text-xs px-2 py-0.5 rounded bg-secondary text-muted-foreground border border-border">
+                                                {t('dashboard.modal.before') || 'Before'}
+                                            </span>
                                         </div>
-                                        <div className="aspect-[4/3] bg-black/40 rounded-xl overflow-hidden border border-white/10 relative flex items-center justify-center group">
+                                        <div className="aspect-[4/3] bg-secondary rounded-xl overflow-hidden border border-border relative flex items-center justify-center">
                                             {modalImages.original ? (
                                                 // eslint-disable-next-line @next/next/no-img-element
                                                 <img src={modalImages.original} alt="Original" className="max-w-full max-h-full object-contain" />
                                             ) : (
-                                                <p className="text-slate-500 text-sm">Not available</p>
+                                                <p className="text-muted-foreground text-sm">
+                                                    {t('dashboard.modal.notavailable') || 'Not available'}
+                                                </p>
                                             )}
                                         </div>
                                     </div>
@@ -290,15 +324,21 @@ export default function DashboardPage() {
                                     {/* Processed Image */}
                                     <div className="space-y-3">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm font-bold text-emerald-400">Restored Result</span>
-                                            <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">After</span>
+                                            <span className="text-sm font-bold text-success">
+                                                {t('preview.result') || 'Restored Result'}
+                                            </span>
+                                            <span className="text-xs px-2 py-0.5 rounded bg-success/10 text-success border border-success/20">
+                                                {t('dashboard.modal.after') || 'After'}
+                                            </span>
                                         </div>
-                                        <div className="aspect-[4/3] bg-black/40 rounded-xl overflow-hidden border border-emerald-500/20 relative flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.1)] group">
+                                        <div className="aspect-[4/3] bg-secondary rounded-xl overflow-hidden border border-success/20 relative flex items-center justify-center">
                                             {modalImages.processed ? (
                                                 // eslint-disable-next-line @next/next/no-img-element
                                                 <img src={modalImages.processed} alt="Processed" className="max-w-full max-h-full object-contain" />
                                             ) : (
-                                                <p className="text-slate-500 text-sm">Not available</p>
+                                                <p className="text-muted-foreground text-sm">
+                                                    {t('dashboard.modal.notavailable') || 'Not available'}
+                                                </p>
                                             )}
                                         </div>
                                     </div>
@@ -307,17 +347,21 @@ export default function DashboardPage() {
                         </div>
 
                         {/* Modal Footer */}
-                        <div className="bg-[#0f172a] px-6 py-4 border-t border-white/5 flex justify-end gap-3">
+                        <div className="bg-secondary/30 px-6 py-4 border-t border-border flex justify-end gap-3">
                             {modalImages?.processed && (
-                                <Button onClick={() => window.open(modalImages.processed, '_blank')} variant="default" className="bg-indigo-600 hover:bg-indigo-500">
-                                    <span className="material-icons-round mr-2 text-sm">download</span> Download
+                                <Button
+                                    onClick={() => window.open(modalImages.processed, '_blank')}
+                                    variant="default"
+                                >
+                                    <span className="material-icons-round mr-2 text-sm">download</span>
+                                    {t('btn.download') || 'Download'}
                                 </Button>
                             )}
-                            <Button onClick={closeModal} variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/5">
-                                Close
+                            <Button onClick={closeModal} variant="outline">
+                                {t('dashboard.btn.close') || 'Close'}
                             </Button>
                         </div>
-                    </div>
+                    </Card>
                 </div>
             )}
         </div>
