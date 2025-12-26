@@ -3,78 +3,131 @@
 @layer base {
   :root {
     color-scheme: light;
-    --background: 210, 40%, 98%;
+
+    /* Semantic Colors - Light Mode */
+    --background: 250, 252, 253;
+    /* Near white with slight blue tint */
+    --foreground: 15, 23, 42;
+    /* Slate 900 */
+
+    --card: 255, 255, 255;
+    /* Pure white */
+    --card-foreground: 15, 23, 42;
+    /* Slate 900 */
+
+    --popover: 255, 255, 255;
+    --popover-foreground: 15, 23, 42;
+
+    --primary: 99, 102, 241;
+    /* Indigo 500 */
+    --primary-foreground: 248, 250, 252;
     /* Slate 50 */
-    --foreground: 222, 47%, 11%;
-    /* Slate 900 */
 
-    --card: 0, 0%, 100%;
-    /* White */
-    --card-foreground: 222, 47%, 11%;
-    /* Slate 900 */
+    --secondary: 241, 245, 249;
+    /* Slate 100 */
+    --secondary-foreground: 30, 41, 59;
+    /* Slate 800 */
 
-    --popover: 0, 0%, 100%;
-    --popover-foreground: 222, 47%, 11%;
+    --muted: 241, 245, 249;
+    /* Slate 100 */
+    --muted-foreground: 100, 116, 139;
+    /* Slate 500 */
 
-    --primary: 243, 75%, 59%;
-    /* Indigo 600 */
-    --primary-foreground: 210, 40%, 98%;
+    --accent: 224, 231, 255;
+    /* Indigo 100 */
+    --accent-foreground: 67, 56, 202;
+    /* Indigo 700 */
 
-    --secondary: 210, 40%, 96.1%;
-    --secondary-foreground: 222, 47%, 11%;
+    --destructive: 239, 68, 68;
+    /* Red 500 */
+    --destructive-foreground: 254, 242, 242;
+    /* Red 50 */
 
-    --muted: 210, 40%, 96.1%;
-    --muted-foreground: 215.4, 16.3%, 46.9%;
+    --success: 34, 197, 94;
+    /* Green 500 */
+    --success-foreground: 240, 253, 244;
+    /* Green 50 */
 
-    --accent: 210, 40%, 96.1%;
-    --accent-foreground: 222, 47%, 11%;
+    --warning: 245, 158, 11;
+    /* Amber 500 */
+    --warning-foreground: 255, 251, 235;
+    /* Amber 50 */
 
-    --destructive: 0, 84.2%, 60.2%;
-    --destructive-foreground: 210, 40%, 98%;
+    --border: 226, 232, 240;
+    /* Slate 200 */
+    --input: 226, 232, 240;
+    /* Slate 200 */
+    --ring: 99, 102, 241;
+    /* Indigo 500 */
 
-    --border: 214.3, 31.8%, 91.4%;
-    --input: 214.3, 31.8%, 91.4%;
-    --ring: 222.2, 84%, 4.9%;
-
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+    /* Slightly larger for modern look */
   }
 
   .dark {
     color-scheme: dark;
-    --background: 0, 0%, 4%;
-    /* #0a0a0a */
-    --foreground: 210, 40%, 98%;
-    /* #ededed */
 
-    --card: 222, 47%, 11%;
-    /* Slate 900 approximation */
-    --card-foreground: 210, 40%, 98%;
+    /* Semantic Colors - Dark Mode */
+    --background: 15, 23, 42;
+    /* Slate 900 */
+    --foreground: 248, 250, 252;
+    /* Slate 50 */
 
-    --popover: 222, 47%, 11%;
-    --popover-foreground: 210, 40%, 98%;
+    --card: 30, 41, 59;
+    /* Slate 800 */
+    --card-foreground: 248, 250, 252;
+    /* Slate 50 */
 
-    --primary: 243, 75%, 59%;
-    --primary-foreground: 222, 47%, 11%;
+    --popover: 30, 41, 59;
+    /* Slate 800 */
+    --popover-foreground: 248, 250, 252;
 
-    --secondary: 217.2, 32.6%, 17.5%;
-    --secondary-foreground: 210, 40%, 98%;
+    --primary: 129, 140, 248;
+    /* Indigo 400 */
+    --primary-foreground: 15, 23, 42;
+    /* Slate 900 */
 
-    --muted: 217.2, 32.6%, 17.5%;
-    --muted-foreground: 215, 20.2%, 65.1%;
+    --secondary: 51, 65, 85;
+    /* Slate 700 */
+    --secondary-foreground: 248, 250, 252;
+    /* Slate 50 */
 
-    --accent: 217.2, 32.6%, 17.5%;
-    --accent-foreground: 210, 40%, 98%;
+    --muted: 51, 65, 85;
+    /* Slate 700 */
+    --muted-foreground: 148, 163, 184;
+    /* Slate 400 */
 
-    --destructive: 0, 62.8%, 30.6%;
-    --destructive-foreground: 210, 40%, 98%;
+    --accent: 55, 48, 163;
+    /* Indigo 800 */
+    --accent-foreground: 224, 231, 255;
+    /* Indigo 100 */
 
-    --border: 217.2, 32.6%, 17.5%;
-    --input: 217.2, 32.6%, 17.5%;
-    --ring: 212.7, 26.8%, 83.9%;
+    --destructive: 220, 38, 38;
+    /* Red 700 */
+    --destructive-foreground: 254, 242, 242;
+    /* Red 50 */
+
+    --success: 22, 163, 74;
+    /* Green 600 */
+    --success-foreground: 240, 253, 244;
+    /* Green 50 */
+
+    --warning: 217, 119, 6;
+    /* Amber 600 */
+    --warning-foreground: 255, 251, 235;
+    /* Amber 50 */
+
+    --border: 51, 65, 85;
+    /* Slate 700 */
+    --input: 51, 65, 85;
+    /* Slate 700 */
+    --ring: 165, 180, 252;
+    /* Indigo 300 */
   }
 }
 
 @theme inline {
+  /* Color Tokens */
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
@@ -99,77 +152,165 @@
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
 
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
 
+  /* Radius Tokens */
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 0.25rem);
+  --radius-sm: calc(var(--radius) - 0.5rem);
 
-  /* Legacy - keeping for animations */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Spacing Scale - Consistent 4px base */
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;
+  /* 4px */
+  --spacing-2: 0.5rem;
+  /* 8px */
+  --spacing-3: 0.75rem;
+  /* 12px */
+  --spacing-4: 1rem;
+  /* 16px */
+  --spacing-6: 1.5rem;
+  /* 24px */
+  --spacing-8: 2rem;
+  /* 32px */
+  --spacing-12: 3rem;
+  /* 48px */
+  --spacing-16: 4rem;
+  /* 64px */
+  --spacing-24: 6rem;
+  /* 96px */
 
-  --color-primary-hover: #059669;
-  /* To replace later */
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;
+  /* 12px */
+  --font-size-sm: 0.875rem;
+  /* 14px */
+  --font-size-base: 1rem;
+  /* 16px */
+  --font-size-lg: 1.125rem;
+  /* 18px */
+  --font-size-xl: 1.25rem;
+  /* 20px */
+  --font-size-2xl: 1.5rem;
+  /* 24px */
+  --font-size-3xl: 1.875rem;
+  /* 30px */
+  --font-size-4xl: 2.25rem;
+  /* 36px */
+  --font-size-5xl: 3rem;
+  /* 48px */
+  --font-size-6xl: 3.75rem;
+  /* 60px */
 
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-pulse-soft: pulse-soft 4s ease-in-out infinite;
-  --animate-gradient-xy: gradient-xy 15s ease infinite;
+  /* Shadow Tokens - Simplified */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-  @keyframes float {
+  /* Simple Animations */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulse {
 
     0%,
     100% {
-      transform: translateY(0px);
+      opacity: 1;
     }
 
     50% {
-      transform: translateY(-20px);
+      opacity: 0.5;
     }
   }
+}
 
-  @keyframes pulse-soft {
-
-    0%,
-    100% {
-      opacity: 0.3;
-      transform: scale(1);
-    }
-
-    50% {
-      opacity: 0.6;
-      transform: scale(1.05);
-    }
-  }
-
-  @keyframes gradient-xy {
-    0% {
-      background-position: 0% 50%;
-    }
-
-    50% {
-      background-position: 100% 50%;
-    }
-
-    100% {
-      background-position: 0% 50%;
-    }
-  }
+/* Base Styles */
+* {
+  border-color: hsl(var(--border));
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
+/* Focus Visible - Accessibility */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: hsl(var(--primary) / 0.2);
+  color: hsl(var(--foreground));
+}
+
+/* Utility Classes */
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Gradient Background Pattern */
+.bg-gradient-mesh {
+  background:
+    radial-gradient(at 0% 0%, hsl(var(--primary) / 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsl(var(--accent) / 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsl(var(--primary) / 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsl(var(--accent) / 0.05) 0px, transparent 50%),
+    hsl(var(--background));
+}
+
+/* Subtle Grid Pattern */
 .bg-grid-pattern {
-  background-size: 24px 24px;
-  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, hsl(var(--border) / 0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--border) / 0.3) 1px, transparent 1px);
 }
 
 .dark .bg-grid-pattern {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, hsl(var(--border) / 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--border) / 0.2) 1px, transparent 1px);
 }

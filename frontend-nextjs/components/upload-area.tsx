@@ -3,7 +3,6 @@
 import React, { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/components/providers/i18n-provider';
-import { useTheme } from 'next-themes';
 
 interface UploadAreaProps {
     onFilesSelected: (files: File[]) => void;
@@ -11,8 +10,6 @@ interface UploadAreaProps {
 
 export function UploadArea({ onFilesSelected }: UploadAreaProps) {
     const { t } = useI18n();
-    const { theme } = useTheme();
-    const isDark = theme === 'dark';
     const [isDragOver, setIsDragOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -58,56 +55,73 @@ export function UploadArea({ onFilesSelected }: UploadAreaProps) {
     };
 
     return (
-        <div className="max-w-5xl mx-auto">
-            <div className="relative group">
-                {/* Glow Effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 via-purple-500 to-rose-500 rounded-3xl blur opacity-30 group-hover:opacity-75 transition duration-500"></div>
-
-                <div className="relative bg-card/80 backdrop-blur-2xl rounded-2xl border border-border p-2 md:p-4 shadow-2xl overflow-hidden">
-                    {/* Shine Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-                    <div
-                        onClick={handleClick}
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}
-                        className={cn(
-                            "relative flex flex-col items-center justify-center w-full h-[300px] md:h-[400px] border-2 border-dashed rounded-xl transition-all cursor-pointer group-hover:shadow-[inset_0_0_60px_rgba(255,255,255,0.05)]",
-                            isDragOver ? "border-primary bg-primary/5 scale-[1.02]" : "border-border hover:border-primary/50 hover:bg-secondary/50"
-                        )}
-                    >
-                        <div className="flex flex-col items-center justify-center space-y-6 pointer-events-none z-10">
-                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-secondary to-background flex items-center justify-center shadow-lg border border-border backdrop-blur-sm group-hover:scale-110 group-hover:bg-secondary transition-all duration-500 animate-float">
-                                <span className="material-icons-round text-6xl text-primary drop-shadow-lg">cloud_upload</span>
-                            </div>
-                            <div className="space-y-3 text-center">
-                                <p className={cn(
-                                    "text-2xl md:text-3xl font-bold tracking-wide drop-shadow-md transition-colors duration-300",
-                                    isDark ? "text-white" : "text-slate-900"
-                                )}>
-                                    {t('upload.text') || 'Drag & Drop Image Here'}
-                                </p>
-                                <div className="flex items-center justify-center gap-2">
-                                    {['JPG', 'PNG', 'WebP'].map(ext => (
-                                        <span key={ext} className="px-2 py-1 bg-secondary rounded text-xs text-muted-foreground border border-border">
-                                            {ext}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            accept="image/jpeg,image/png,image/webp"
-                            multiple
-                            className="hidden"
-                            onChange={handleFileInput}
-                        />
+        <div className="max-w-4xl mx-auto">
+            <div
+                className={cn(
+                    "relative group rounded-2xl border-2 border-dashed transition-all duration-300 overflow-hidden",
+                    "bg-card/50 backdrop-blur-sm shadow-lg hover:shadow-xl",
+                    isDragOver
+                        ? "border-primary bg-primary/5 scale-[1.02]"
+                        : "border-border hover:border-primary/50"
+                )}
+            >
+                <div
+                    onClick={handleClick}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className="flex flex-col items-center justify-center w-full h-[320px] md:h-[400px] cursor-pointer p-8"
+                >
+                    {/* Upload Icon */}
+                    <div className={cn(
+                        "w-20 h-20 rounded-full flex items-center justify-center mb-6 transition-all duration-300",
+                        "bg-primary/10 group-hover:bg-primary/20 group-hover:scale-110",
+                        isDragOver && "scale-110 bg-primary/20"
+                    )}>
+                        <span className="material-icons-round text-5xl text-primary">
+                            cloud_upload
+                        </span>
                     </div>
+
+                    {/* Text Content */}
+                    <div className="space-y-4 text-center">
+                        <h3 className="text-2xl md:text-3xl font-bold text-foreground">
+                            {t('upload.text') || 'Drop your images here'}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                            or click to browse from your device
+                        </p>
+
+                        {/* Supported Formats */}
+                        <div className="flex items-center justify-center gap-2 pt-2">
+                            {['JPG', 'PNG', 'WebP'].map(ext => (
+                                <span
+                                    key={ext}
+                                    className="px-3 py-1 bg-secondary/80 rounded-md text-xs font-medium text-muted-foreground border border-border"
+                                >
+                                    {ext}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Hidden File Input */}
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        className="hidden"
+                        onChange={handleFileInput}
+                        aria-label="Upload images"
+                    />
                 </div>
             </div>
+
+            {/* Upload Info */}
+            <p className="text-xs text-muted-foreground text-center mt-4">
+                Maximum file size: 20MB • All processing happens locally in your browser
+            </p>
         </div>
     );
 }

@@ -31,41 +31,45 @@ export function Header() {
     return (
         <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border transition-all duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-20">
+                <div className="flex items-center justify-between h-16">
                     {/* Logo */}
-                    <div className="flex-shrink-0 flex items-center gap-2">
+                    <div className="flex-shrink-0">
                         <Link href="/" className="group flex items-center gap-3">
-                            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-500 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
-                                <svg className="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                </svg>
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                                <span className="text-primary-foreground text-lg font-bold">G</span>
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-lg font-bold text-foreground tracking-tight group-hover:text-primary transition-colors">GeminiDeMark</span>
-                            </div>
+                            <span className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                                GeminiDeMark
+                            </span>
                         </Link>
                     </div>
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center gap-6">
+                    <nav className="hidden md:flex items-center gap-4">
                         {isLoggedIn ? (
                             <>
-                                <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/80 rounded-full transition-all">
+                                <Link
+                                    href="/dashboard"
+                                    className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-all"
+                                >
                                     <span className="material-icons-round text-lg">dashboard</span>
                                     Dashboard
                                 </Link>
-                                <button onClick={logout} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/80 rounded-full transition-all">
+                                <button
+                                    onClick={logout}
+                                    className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-all"
+                                >
                                     <span className="material-icons-round text-lg">logout</span>
                                     Sign Out
                                 </button>
                             </>
                         ) : (
                             <Button
-                                variant="gradient"
-                                className="shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 hover:-translate-y-0.5 rounded-full"
+                                variant="default"
+                                size="sm"
                                 onClick={() => { /* Should trigger login modal */ }}
                             >
-                                <span className="material-icons-round text-lg mr-2">login</span>
+                                <span className="material-icons-round text-sm mr-1">login</span>
                                 Sign In
                             </Button>
                         )}
@@ -76,7 +80,8 @@ export function Header() {
                         {mounted && (
                             <button
                                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                                className="flex items-center justify-center w-8 h-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all"
+                                className="flex items-center justify-center w-9 h-9 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
+                                aria-label="Toggle theme"
                             >
                                 <span className="material-icons-round text-xl">
                                     {theme === 'dark' ? 'light_mode' : 'dark_mode'}
@@ -84,25 +89,28 @@ export function Header() {
                             </button>
                         )}
 
+                        {/* Language Selector */}
                         <div className="relative">
                             <button
                                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
                                 onBlur={() => setTimeout(() => setIsLangMenuOpen(false), 200)}
-                                className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-muted-foreground bg-secondary/50 hover:bg-secondary hover:text-foreground border border-border rounded-full transition-all"
+                                className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-muted-foreground bg-secondary hover:bg-secondary/80 border border-border rounded-lg transition-all"
+                                aria-label="Select language"
+                                aria-expanded={isLangMenuOpen}
                             >
-                                <span className="material-icons-round text-sm opacity-70">translate</span>
+                                <span className="material-icons-round text-sm">translate</span>
                                 <span>{currentLangLabel}</span>
-                                <span className="material-icons-round text-sm opacity-50 ml-0.5">expand_more</span>
+                                <span className="material-icons-round text-sm">expand_more</span>
                             </button>
 
                             {/* Dropdown */}
                             {isLangMenuOpen && (
-                                <div className="absolute top-full right-0 mt-2 w-32 bg-popover border border-border rounded-xl shadow-xl overflow-hidden transition-all origin-top-right z-50">
+                                <div className="absolute top-full right-0 mt-2 w-36 bg-popover border border-border rounded-lg shadow-xl overflow-hidden z-50">
                                     {languages.map(lang => (
                                         <button
                                             key={lang.code}
                                             onClick={() => switchLocale(lang.code)}
-                                            className="w-full text-left px-4 py-2.5 text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors flex items-center gap-2"
+                                            className="w-full text-left px-4 py-2.5 text-sm font-medium text-popover-foreground hover:bg-secondary transition-colors"
                                         >
                                             {lang.label}
                                         </button>
@@ -113,10 +121,25 @@ export function Header() {
                     </nav>
 
                     {/* Mobile Menu Button */}
-                    <div className="md:hidden flex items-center">
+                    <div className="md:hidden flex items-center gap-2">
+                        {/* Theme Toggle Mobile */}
+                        {mounted && (
+                            <button
+                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                                aria-label="Toggle theme"
+                            >
+                                <span className="material-icons-round text-xl">
+                                    {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+                                </span>
+                            </button>
+                        )}
+
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none transition-colors"
+                            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                            aria-label="Toggle menu"
+                            aria-expanded={isMobileMenuOpen}
                         >
                             <span className="material-icons-round text-2xl">menu</span>
                         </button>
@@ -125,36 +148,40 @@ export function Header() {
             </div>
 
             {/* Mobile Menu */}
-            <div className={`md:hidden bg-background/95 backdrop-blur-xl border-t border-border overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="px-4 pt-2 pb-6 space-y-1 shadow-lg">
-                    {/* Mobile Theme Toggle */}
-                    <div className="flex items-center justify-between px-3 py-3 text-base font-medium text-foreground">
-                        <span>Theme</span>
-                        {mounted && (
-                            <button
-                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                                className="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/50"
-                            >
-                                <span className="material-icons-round text-sm">
-                                    {theme === 'dark' ? 'light_mode' : 'dark_mode'}
-                                </span>
-                                <span className="text-sm capitalize">{theme}</span>
-                            </button>
-                        )}
-                    </div>
+            <div
+                className={cn(
+                    "md:hidden bg-background/95 backdrop-blur-xl border-t border-border overflow-hidden transition-all duration-300",
+                    isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                )}
+            >
+                <div className="px-4 pt-2 pb-6 space-y-1">
                     {isLoggedIn ? (
                         <>
-                            <Link href="/" className="flex items-center px-3 py-3 rounded-lg text-base font-medium text-foreground bg-secondary/20">
-                                <span className="material-icons-round mr-3">home</span>
-                                Home
+                            <Link
+                                href="/dashboard"
+                                className="flex items-center px-3 py-3 rounded-lg text-base font-medium text-foreground hover:bg-secondary"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <span className="material-icons-round mr-3">dashboard</span>
+                                Dashboard
                             </Link>
-                            <button onClick={logout} className="w-full flex items-center px-3 py-3 rounded-lg text-base font-medium text-destructive hover:bg-secondary/20">
+                            <button
+                                onClick={() => {
+                                    logout();
+                                    setIsMobileMenuOpen(false);
+                                }}
+                                className="w-full flex items-center px-3 py-3 rounded-lg text-base font-medium text-foreground hover:bg-secondary"
+                            >
                                 <span className="material-icons-round mr-3">logout</span>
                                 Sign Out
                             </button>
                         </>
                     ) : (
-                        <Button className="w-full flex items-center px-3 py-3 rounded-lg text-base font-medium text-foreground hover:bg-secondary/20 justify-start" variant="ghost">
+                        <Button
+                            className="w-full justify-start"
+                            variant="ghost"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
                             <span className="material-icons-round mr-3">login</span>
                             Sign In
                         </Button>
@@ -163,4 +190,8 @@ export function Header() {
             </div>
         </header>
     );
+}
+
+function cn(...classes: (string | boolean | undefined)[]) {
+    return classes.filter(Boolean).join(' ');
 }

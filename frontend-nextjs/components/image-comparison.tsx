@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { useI18n } from '@/components/providers/i18n-provider';
 import { Button } from './ui/button';
 import { WatermarkInfo } from '@/lib/watermark-engine';
+import { Card } from './ui/card';
 
 interface ImageComparisonProps {
     originalUrl: string;
@@ -46,133 +47,157 @@ export function ImageComparison({
     const isError = originalStatus?.includes('Not an original');
 
     return (
-        <section id="singlePreview" className="relative bg-background/50 backdrop-blur-sm border-t border-border py-12 min-h-screen">
+        <section className="relative bg-background/50 backdrop-blur-sm border-t border-border py-12 min-h-screen">
             <div className="max-w-[90rem] mx-auto px-4">
                 <div className="flex flex-col xl:flex-row gap-8 items-start">
                     {/* Images Grid */}
                     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Original Image */}
-                        <div className="flex flex-col bg-card rounded-2xl border border-border overflow-hidden shadow-2xl">
-                            <div className="bg-secondary/50 px-5 py-3 border-b border-border flex justify-between items-center backdrop-blur-sm">
-                                <h3 className="font-semibold text-foreground flex items-center gap-2.5 text-sm tracking-wide">
-                                    <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"></span>
-                                    Original Source
-                                </h3>
-                                {watermarkInfo && (
-                                    <span className="text-[11px] text-muted-foreground font-mono tracking-tight bg-secondary px-2.5 py-1 rounded-md border border-border">
-                                        Resolution: {width}×{height} <span className="text-muted-foreground/50 mx-1">|</span> WM: {watermarkInfo.size}px
-                                    </span>
-                                )}
+                        <Card variant="glass" className="flex flex-col overflow-hidden">
+                            {/* Header */}
+                            <div className="bg-secondary/50 px-5 py-3 border-b border-border">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="font-semibold text-sm text-foreground flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                                        Original Image
+                                    </h3>
+                                    {watermarkInfo && (
+                                        <span className="text-xs text-muted-foreground font-mono bg-secondary px-2 py-1 rounded border border-border">
+                                            {width}×{height} • WM: {watermarkInfo.size}px
+                                        </span>
+                                    )}
+                                </div>
                             </div>
-                            <div className="relative w-full aspect-[4/3] bg-secondary/30 flex items-center justify-center overflow-hidden p-4 group">
-                                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iI2Y5ZmRmZCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-20"></div>
+
+                            {/* Image Container */}
+                            <div className="relative w-full aspect-[4/3] bg-secondary/30 flex items-center justify-center p-4">
+                                <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={originalUrl}
                                     alt="Original"
-                                    className="relative z-10 max-w-full max-h-full object-contain shadow-lg rounded-lg transition-transform duration-500 hover:scale-[1.02]"
+                                    className="relative z-10 max-w-full max-h-full object-contain rounded-lg shadow-lg hover:scale-[1.02] transition-transform cursor-zoom-in"
                                     data-zoomable
                                 />
                                 {isError && (
-                                    <div className="absolute inset-0 z-20 bg-background/80 backdrop-blur-[2px] flex items-center justify-center">
-                                        <div className="bg-destructive/10 border border-destructive/20 px-6 py-4 rounded-xl backdrop-blur-md flex flex-col items-center gap-2">
+                                    <div className="absolute inset-0 z-20 bg-background/90 backdrop-blur-sm flex items-center justify-center">
+                                        <div className="bg-destructive/10 border border-destructive/20 px-6 py-4 rounded-xl flex flex-col items-center gap-2">
                                             <span className="material-icons-round text-destructive text-3xl">error_outline</span>
-                                            <p className="text-destructive font-medium text-sm">Image not generated by Gemini</p>
+                                            <p className="text-destructive font-medium text-sm">Not a Gemini image</p>
                                         </div>
                                     </div>
                                 )}
                             </div>
-                        </div>
+                        </Card>
 
-                        {/* Processed Results */}
-                        <div className={cn(
-                            "flex flex-col bg-card rounded-2xl border overflow-hidden shadow-2xl transition-all duration-500",
-                            processedUrl ? "border-emerald-500/20 shadow-emerald-500/5" : "border-border opacity-50 grayscale"
-                        )}>
+                        {/* Processed Image */}
+                        <Card
+                            variant="glass"
+                            className={cn(
+                                "flex flex-col overflow-hidden transition-all",
+                                processedUrl ? "border-success/30" : "opacity-60"
+                            )}
+                        >
+                            {/* Header */}
                             <div className={cn(
-                                "px-5 py-3 border-b flex justify-between items-center backdrop-blur-sm",
-                                processedUrl ? "bg-emerald-500/10 border-emerald-500/10" : "bg-secondary/50 border-border"
+                                "px-5 py-3 border-b",
+                                processedUrl
+                                    ? "bg-success/10 border-success/20"
+                                    : "bg-secondary/50 border-border"
                             )}>
-                                <h3 className={cn("font-semibold flex items-center gap-2.5 text-sm tracking-wide", processedUrl ? "text-emerald-500" : "text-muted-foreground")}>
-                                    <span className={cn("w-2 h-2 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.6)]", processedUrl ? "bg-emerald-500" : "bg-muted-foreground")}></span>
-                                    Restored Image
-                                </h3>
-                                {processedUrl && (
-                                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono tracking-tight bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/10">
-                                        System Status: Successfully Removed
-                                    </span>
-                                )}
+                                <div className="flex items-center justify-between">
+                                    <h3 className={cn(
+                                        "font-semibold text-sm flex items-center gap-2",
+                                        processedUrl ? "text-success" : "text-muted-foreground"
+                                    )}>
+                                        <span className={cn(
+                                            "w-2 h-2 rounded-full",
+                                            processedUrl ? "bg-success" : "bg-muted-foreground"
+                                        )}></span>
+                                        Restored Image
+                                    </h3>
+                                    {processedUrl && (
+                                        <span className="text-xs text-success font-mono bg-success/10 px-2 py-1 rounded border border-success/20">
+                                            ✓ Watermark Removed
+                                        </span>
+                                    )}
+                                </div>
                             </div>
-                            <div className="relative w-full aspect-[4/3] bg-secondary/30 flex items-center justify-center overflow-hidden p-4 group">
-                                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iI2Y5ZmRmZCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-20"></div>
+
+                            {/* Image Container */}
+                            <div className="relative w-full aspect-[4/3] bg-secondary/30 flex items-center justify-center p-4">
+                                <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
                                 {processedUrl ? (
                                     // eslint-disable-next-line @next/next/no-img-element
                                     <img
                                         src={processedUrl}
                                         alt="Processed"
-                                        className="relative z-10 max-w-full max-h-full object-contain shadow-lg rounded-lg transition-transform duration-500 hover:scale-[1.02]"
+                                        className="relative z-10 max-w-full max-h-full object-contain rounded-lg shadow-lg hover:scale-[1.02] transition-transform cursor-zoom-in"
                                         data-zoomable
                                     />
                                 ) : (
                                     <div className="flex flex-col items-center gap-3 text-muted-foreground">
-                                        <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center border border-border animate-pulse">
-                                            <span className="material-icons-round text-xl">auto_awesome</span>
+                                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center animate-pulse">
+                                            <span className="material-icons-round text-xl text-primary">auto_awesome</span>
                                         </div>
-                                        <p className="text-xs font-medium">Processing...</p>
+                                        <p className="text-sm font-medium">Processing...</p>
                                     </div>
                                 )}
                             </div>
-                        </div>
+                        </Card>
                     </div>
 
-                    {/* Command Center */}
+                    {/* Control Panel */}
                     <div className="w-full xl:w-80 flex-shrink-0">
-                        <div className="bg-card rounded-2xl border border-border p-6 sticky top-24 shadow-xl">
-                            <h4 className="text-sm font-bold text-foreground mb-6 flex items-center gap-2.5 uppercase tracking-wider">
+                        <Card variant="glass" className="p-6 sticky top-24">
+                            <h4 className="text-sm font-bold text-foreground mb-6 flex items-center gap-2 uppercase tracking-wider">
                                 <span className="material-icons-round text-primary text-lg">tune</span>
-                                Command Center
+                                Actions
                             </h4>
 
                             <div className="space-y-3">
                                 <Button
                                     variant="default"
                                     size="lg"
-                                    className={cn(
-                                        "w-full h-12 text-sm font-bold shadow-lg shadow-indigo-500/20 transition-all",
-                                        !processedUrl || isError ? "opacity-50 cursor-not-allowed bg-muted text-muted-foreground" : "bg-gradient-to-r from-blue-600 to-emerald-500 hover:from-blue-500 hover:to-emerald-400 text-white hover:-translate-y-0.5"
-                                    )}
+                                    className="w-full"
                                     onClick={onDownload}
                                     disabled={!processedUrl || isError}
                                 >
                                     <span className="material-icons-round mr-2 text-lg">download</span>
-                                    {t('btn.download') || 'Save Image'}
+                                    {t('btn.download') || 'Download'}
                                 </Button>
 
                                 <Button
                                     variant="outline"
                                     size="lg"
-                                    className="w-full h-12 border-border bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground hover:border-border text-sm font-medium transition-all"
+                                    className="w-full"
                                     onClick={onReset}
                                 >
-                                    <span className="material-icons-round mr-2 text-lg rotate-180">refresh</span>
+                                    <span className="material-icons-round mr-2 text-lg">refresh</span>
                                     {t('btn.reset') || 'Process Another'}
                                 </Button>
                             </div>
 
-                            <div className="mt-6 pt-6 border-t border-border text-center">
+                            {/* Status */}
+                            <div className="mt-6 pt-6 border-t border-border">
                                 {isError ? (
-                                    <p className="text-xs font-bold text-destructive bg-destructive/5 py-2 px-3 rounded-lg border border-destructive/10 flex items-center justify-center gap-2">
+                                    <div className="text-xs font-medium text-destructive bg-destructive/5 py-2 px-3 rounded-lg border border-destructive/10 flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse"></span>
                                         Not a Gemini Image
-                                    </p>
+                                    </div>
+                                ) : processedUrl ? (
+                                    <div className="text-xs font-medium text-success bg-success/5 py-2 px-3 rounded-lg border border-success/10 flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-success"></span>
+                                        Processing Complete
+                                    </div>
                                 ) : (
-                                    <p className="text-xs font-bold text-amber-500/80 bg-amber-500/5 py-2 px-3 rounded-lg border border-amber-500/10 flex items-center justify-center gap-2">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80"></span>
-                                        {originalStatus || 'Ready to Process'}
-                                    </p>
+                                    <div className="text-xs font-medium text-primary bg-primary/5 py-2 px-3 rounded-lg border border-primary/10 flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                        {originalStatus || 'Processing...'}
+                                    </div>
                                 )}
                             </div>
-                        </div>
+                        </Card>
                     </div>
                 </div>
             </div>
