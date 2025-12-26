@@ -26,7 +26,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
       </head>
       <body
-        className={`${inter.className} bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground flex flex-col min-h-screen transition-colors duration-300`}
+        className={`${inter.className} text-foreground antialiased selection:bg-primary selection:text-primary-foreground flex flex-col min-h-screen transition-colors duration-300`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <I18nProvider>

@@ -1,10 +1,11 @@
-'use client';
-
-import React from 'react';
+import { useTheme } from 'next-themes';
+import { cn } from '@/lib/utils';
 import { useI18n } from '@/components/providers/i18n-provider';
 
 export function FeaturesSection() {
     const { t } = useI18n();
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
 
     const features = [
         {
@@ -31,16 +32,21 @@ export function FeaturesSection() {
     ];
 
     return (
-        <section className="relative py-24 border-t border-border bg-background/50 overflow-hidden">
-            {/* Decorative Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full bg-primary/5 blur-[120px] pointer-events-none"></div>
-
+        <section className="relative py-32 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center mb-20">
-                    <h3 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-primary to-emerald-500 mb-6 tracking-tight">
+                    <h3 className={cn(
+                        "text-4xl md:text-5xl font-extrabold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r",
+                        isDark
+                            ? "from-white via-slate-200 to-slate-400"
+                            : "from-slate-900 via-slate-700 to-slate-800"
+                    )}>
                         {t('feature.title') || 'Features'}
                     </h3>
-                    <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
+                    <p className={cn(
+                        "max-w-2xl mx-auto text-lg leading-relaxed font-medium transition-colors duration-300",
+                        isDark ? "text-slate-400" : "text-slate-600"
+                    )}>
                         {t('feature.subtitle') || 'Everything you need to process images perfectly'}
                     </p>
                 </div>
@@ -49,20 +55,50 @@ export function FeaturesSection() {
                     {features.map((feature) => (
                         <div
                             key={feature.id}
-                            className="feature-card h-full group relative p-8 rounded-[2rem] bg-card border border-border backdrop-blur-md hover:bg-secondary/50 transition-colors duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                            className={cn(
+                                "group relative p-8 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-2",
+                                isDark
+                                    ? "bg-slate-900/40 border border-white/5 shadow-2xl shadow-black/40 hover:bg-slate-800/60 hover:border-white/10 hover:shadow-indigo-500/10 backdrop-blur-xl"
+                                    : "bg-white/60 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:bg-white/80 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] backdrop-blur-xl"
+                            )}
                         >
-                            <div className={`absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-border to-transparent group-hover:via-${feature.color}-500/50 transition-colors duration-500`}></div>
+                            {/* Specular Highlight (Top) */}
+                            <div className={cn(
+                                "absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700",
+                                !isDark && "via-black/5"
+                            )}></div>
 
-                            <div className={`w-18 h-18 rounded-2xl bg-gradient-to-br from-${feature.color}-500/10 to-purple-500/10 border border-${feature.color}-500/10 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:border-${feature.color}-500/20 transition-all duration-500 shadow-inner`}>
-                                <span className={`material-icons-round text-4xl text-${feature.color}-500 group-hover:text-${feature.color}-400 transition-colors`}>{feature.icon}</span>
+                            {/* Icon Container */}
+                            <div className={cn(
+                                "w-20 h-20 rounded-2xl flex items-center justify-center mb-8 transition-all duration-500 group-hover:scale-110",
+                                isDark
+                                    ? `bg-gradient-to-br from-${feature.color}-500/10 to-${feature.color}-600/5 border border-${feature.color}-500/10 shadow-[inner_0_0_20px_rgba(0,0,0,0.2)]`
+                                    : `bg-gradient-to-br from-white to-${feature.color}-50 border border-white shadow-[0_4px_20px_rgb(0,0,0,0.03)]`
+                            )}>
+                                <span className={cn(
+                                    "material-icons-round text-4xl transition-colors duration-300",
+                                    isDark ? `text-${feature.color}-400` : `text-${feature.color}-600`
+                                )}>{feature.icon}</span>
                             </div>
 
-                            <h4 className={`text-2xl font-bold text-foreground mb-4 group-hover:text-${feature.color}-600 dark:group-hover:text-${feature.color}-200 transition-colors`}>
+                            <h4 className={cn(
+                                "text-2xl font-bold mb-4 tracking-tight transition-colors",
+                                isDark ? "text-white" : "text-slate-900"
+                            )}>
                                 {feature.title}
                             </h4>
-                            <p className="text-muted-foreground leading-relaxed font-light">
+                            <p className={cn(
+                                "leading-relaxed transition-colors",
+                                isDark ? "text-slate-400 font-light" : "text-slate-600 font-normal"
+                            )}>
                                 {feature.desc}
                             </p>
+
+                            {/* Bottom Glow */}
+                            <div className={cn(
+                                "absolute bottom-0 right-0 w-32 h-32 rounded-full blur-[60px] opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none",
+                                `bg-${feature.color}-500`
+                            )}></div>
                         </div>
                     ))}
                 </div>

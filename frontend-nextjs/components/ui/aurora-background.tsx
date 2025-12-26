@@ -38,11 +38,11 @@ export function AuroraBackground({ className }: AuroraBackgroundProps) {
                 [49, 46, 129],   // Indigo 900
                 [6, 78, 59]      // Emerald 900
             ] : [
-                [248, 250, 252], // Slate 50
-                [204, 251, 241], // Teal 100
-                [254, 226, 226], // Red 100
-                [224, 231, 255], // Indigo 100
-                [209, 250, 229]  // Emerald 100
+                [56, 189, 248],  // Sky 400
+                [167, 139, 250], // Violet 400
+                [251, 113, 133], // Rose 400
+                [52, 211, 153],  // Emerald 400
+                [250, 204, 21]   // Yellow 400
             ],
             background: isDark ? '#0f172a' : '#f8fafc' // Slate 900 vs Slate 50
         };
@@ -116,9 +116,13 @@ export function AuroraBackground({ className }: AuroraBackgroundProps) {
     }, [theme]); // Re-run effect when theme changes
 
     return (
-        <canvas
-            ref={canvasRef}
-            className={cn("fixed inset-0 w-full h-full -z-20 pointer-events-none", className)}
-        />
+        <>
+            <div className="fixed inset-0 w-full h-full -z-30 bg-background pointer-events-none transition-colors duration-300"></div>
+            <div className="fixed inset-0 w-full h-full -z-20 bg-grid-pattern pointer-events-none opacity-[0.5] dark:opacity-[0.3]"></div>
+            <canvas
+                ref={canvasRef}
+                className={cn("fixed inset-0 w-full h-full -z-10 pointer-events-none", className)}
+            />
+        </>
     );
 }

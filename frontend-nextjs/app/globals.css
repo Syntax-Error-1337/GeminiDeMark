@@ -2,73 +2,75 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    color-scheme: light;
+    --background: 210, 40%, 98%;
     /* Slate 50 */
-    --foreground: 222 47% 11%;
+    --foreground: 222, 47%, 11%;
     /* Slate 900 */
 
-    --card: 0 0% 100%;
+    --card: 0, 0%, 100%;
     /* White */
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222, 47%, 11%;
     /* Slate 900 */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover: 0, 0%, 100%;
+    --popover-foreground: 222, 47%, 11%;
 
-    --primary: 243 75% 59%;
+    --primary: 243, 75%, 59%;
     /* Indigo 600 */
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 210, 40%, 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 210, 40%, 96.1%;
+    --secondary-foreground: 222, 47%, 11%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210, 40%, 96.1%;
+    --muted-foreground: 215.4, 16.3%, 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 210, 40%, 96.1%;
+    --accent-foreground: 222, 47%, 11%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0, 84.2%, 60.2%;
+    --destructive-foreground: 210, 40%, 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 214.3, 31.8%, 91.4%;
+    --input: 214.3, 31.8%, 91.4%;
+    --ring: 222.2, 84%, 4.9%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0 0% 4%;
+    color-scheme: dark;
+    --background: 0, 0%, 4%;
     /* #0a0a0a */
-    --foreground: 210 40% 98%;
+    --foreground: 210, 40%, 98%;
     /* #ededed */
 
-    --card: 222 47% 11%;
+    --card: 222, 47%, 11%;
     /* Slate 900 approximation */
-    --card-foreground: 210 40% 98%;
+    --card-foreground: 210, 40%, 98%;
 
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222, 47%, 11%;
+    --popover-foreground: 210, 40%, 98%;
 
-    --primary: 243 75% 59%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 243, 75%, 59%;
+    --primary-foreground: 222, 47%, 11%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 217.2, 32.6%, 17.5%;
+    --secondary-foreground: 210, 40%, 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 217.2, 32.6%, 17.5%;
+    --muted-foreground: 215, 20.2%, 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 217.2, 32.6%, 17.5%;
+    --accent-foreground: 210, 40%, 98%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0, 62.8%, 30.6%;
+    --destructive-foreground: 210, 40%, 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 217.2, 32.6%, 17.5%;
+    --input: 217.2, 32.6%, 17.5%;
+    --ring: 212.7, 26.8%, 83.9%;
   }
 }
 
@@ -161,4 +163,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.bg-grid-pattern {
+  background-size: 24px 24px;
+  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+}
+
+.dark .bg-grid-pattern {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }

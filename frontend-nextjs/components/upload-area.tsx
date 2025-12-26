@@ -3,6 +3,7 @@
 import React, { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/components/providers/i18n-provider';
+import { useTheme } from 'next-themes';
 
 interface UploadAreaProps {
     onFilesSelected: (files: File[]) => void;
@@ -10,6 +11,8 @@ interface UploadAreaProps {
 
 export function UploadArea({ onFilesSelected }: UploadAreaProps) {
     const { t } = useI18n();
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const [isDragOver, setIsDragOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -79,7 +82,10 @@ export function UploadArea({ onFilesSelected }: UploadAreaProps) {
                                 <span className="material-icons-round text-6xl text-primary drop-shadow-lg">cloud_upload</span>
                             </div>
                             <div className="space-y-3 text-center">
-                                <p className="text-2xl md:text-3xl font-bold text-foreground tracking-wide drop-shadow-md">
+                                <p className={cn(
+                                    "text-2xl md:text-3xl font-bold tracking-wide drop-shadow-md transition-colors duration-300",
+                                    isDark ? "text-white" : "text-slate-900"
+                                )}>
                                     {t('upload.text') || 'Drag & Drop Image Here'}
                                 </p>
                                 <div className="flex items-center justify-center gap-2">

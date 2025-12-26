@@ -46,7 +46,7 @@ export function ImageComparison({
     const isError = originalStatus?.includes('Not an original');
 
     return (
-        <section id="singlePreview" className="relative bg-background border-t border-border py-12 min-h-screen">
+        <section id="singlePreview" className="relative bg-background/50 backdrop-blur-sm border-t border-border py-12 min-h-screen">
             <div className="max-w-[90rem] mx-auto px-4">
                 <div className="flex flex-col xl:flex-row gap-8 items-start">
                     {/* Images Grid */}
