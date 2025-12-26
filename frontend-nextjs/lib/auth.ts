@@ -94,6 +94,29 @@ export const Auth = {
         }
     },
 
+    async verifyEmail(token: string): Promise<AuthResponse> {
+        try {
+            const response = await fetch(`${this.API_URL}/verify-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Verification failed');
+            }
+
+            return { success: true, message: data.message };
+        } catch (error: any) {
+            console.error('Verification Error:', error);
+            return { success: false, message: error.message };
+        }
+    },
+
     logout() {
         localStorage.removeItem(this.TOKEN_KEY);
         localStorage.removeItem(this.USER_KEY);
