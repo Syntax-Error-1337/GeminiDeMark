@@ -1,12 +1,8 @@
-const db = require('../models/User'); // Import User directly or via a db index if you had one. 
-// Assuming ../models/User.js exports the User model directly.
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const sgMail = require('@sendgrid/mail');
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const emailService = require('../services/emailService');
 
 exports.register = async (req, res) => {
     try {
@@ -21,12 +17,13 @@ exports.register = async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 8);
 
-        // Check if SendGrid is configured
-        const isSendGridConfigured = !!process.env.SENDGRID_API_KEY && process.env.SENDGRID_API_KEY !== 'SG.placeholder_key';
+        // Verification Logic
+        const requireVerification = process.env.REQUIRE_EMAIL_VERIFICATION === 'true';
 
-        // Generate verification token only if needed
-        const verificationToken = isSendGridConfigured ? crypto.randomBytes(32).toString('hex') : null;
-        const isVerified = !isSendGridConfigured;
+        // If verification is required, we generate a token and set verified to false.
+        // If not, we set verified to true immediately.
+        const verificationToken = requireVerification ? crypto.randomBytes(32).toString('hex') : null;
+        const isVerified = !requireVerification;
 
         // Create user
         const user = await User.create({
@@ -37,28 +34,18 @@ exports.register = async (req, res) => {
             isVerified: isVerified
         });
 
-        if (isSendGridConfigured) {
+        if (requireVerification) {
             // Send verification email
-            const verificationUrl = `${process.env.APP_BASE_URL}/verify-email.html?token=${verificationToken}`;
-
-            const msg = {
-                to: email,
-                from: process.env.SENDGRID_FROM_EMAIL,
-                subject: 'Verify your email',
-                text: `Please click on the following link to verify your email: ${verificationUrl}`,
-                html: `<p>Please click on the following link to verify your email:</p><a href="${verificationUrl}">${verificationUrl}</a>`,
-            };
-
             try {
-                await sgMail.send(msg);
+                await emailService.sendVerificationEmail(email, verificationToken);
+                res.status(201).send({ message: 'User registered successfully! Please check your email to verify.' });
             } catch (emailError) {
-                console.error("SendGrid Error:", emailError);
-                // If email fails, maybe we should warn? 
-                // For now keeping it simple as per previous logic.
+                console.error("Email Service Error:", emailError);
+                // In a real app, you might want to rollback the user creation or allow "resend verification"
+                res.status(201).send({ message: 'User registered, but failed to send verification email. Please contact support or try logging in to resend.' });
             }
-            res.status(201).send({ message: 'User registered successfully! Please check your email to verify.' });
         } else {
-            res.status(201).send({ message: 'User registered successfully! Account verified instantly (Email service not configured).' });
+            res.status(201).send({ message: 'User registered successfully! Account verified instantly.' });
         }
     } catch (error) {
         res.status(500).send({ message: error.message });
@@ -79,8 +66,21 @@ exports.login = async (req, res) => {
             return res.status(401).send({ message: 'Invalid Password!' });
         }
 
+        // Check verification status if required
+        // Note: Even if REQUIRE_EMAIL_VERIFICATION is false NOW, we might want to respect the user's `isVerified` flag 
+        // if they registered when it WAS true. 
+        // So simple logic: if user.isVerified is false, deny access. 
+        // The `register` function controls the initial state of `isVerified`.
         if (!user.isVerified) {
-            return res.status(401).send({ message: 'Please verify your email first.' });
+            // Optional: Allow login if verification is currently disabled globally?
+            // Usually NO. If they have an unverified account, they should verify it.
+            // But if the admin decides "turn off verification", maybe they want everyone to get in?
+            // User's requirement: "if verificatin set to true all new registers usere need to verify theri email to lognin and access."
+            // This implies if set to false, maybe we don't check? 
+            // Logic: If verification is strict, check it.
+            if (process.env.REQUIRE_EMAIL_VERIFICATION === 'true') {
+                return res.status(401).send({ message: 'Please verify your email first.' });
+            }
         }
 
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, {
@@ -107,7 +107,6 @@ exports.verifyEmail = async (req, res) => {
         // const token = req.params.token; 
 
         // However, usually we link to a frontend page which then calls this API or we link directly to api.
-        // Let's support the direct API link approach for simplicity or the frontend approach. 
         // Based on "basic backend", I'll implementation logic for finding the token.
 
         if (!token) {
