@@ -89,7 +89,7 @@ export function UploadArea({ onFilesSelected }: UploadAreaProps) {
                             {t('upload.text') || 'Drop your images here'}
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                            or click to browse from your device
+                            {t('upload.hint') || 'or click to browse from your device'}
                         </p>
 
                         {/* Supported Formats */}
@@ -120,7 +120,7 @@ export function UploadArea({ onFilesSelected }: UploadAreaProps) {
 
             {/* Upload Info */}
             <p className="text-xs text-muted-foreground text-center mt-4">
-                Maximum file size: 20MB • All processing happens locally in your browser
+                {t('upload.maxsize') || 'Maximum file size: 20MB'} • {t('upload.privacy') || 'All processing happens locally in your browser'}
             </p>
         </div>
     );

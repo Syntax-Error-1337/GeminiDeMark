@@ -17,19 +17,19 @@ export function StartHero({ onFilesSelected }: StartHeroProps) {
             id: 1,
             icon: 'upload_file',
             title: t('step.1') || 'Smart Upload',
-            description: 'Drag & drop or paste your images',
+            description: t('step.1.desc') || 'Drag & drop or paste your images',
         },
         {
             id: 2,
             icon: 'auto_awesome',
             title: t('step.2') || 'AI Processing',
-            description: 'Automatic watermark detection',
+            description: t('step.2.desc') || 'Automatic watermark detection',
         },
         {
             id: 3,
             icon: 'download_done',
             title: t('step.3') || 'Instant Download',
-            description: 'Save in original quality',
+            description: t('step.3.desc') || 'Save in original quality',
         }
     ];
 
