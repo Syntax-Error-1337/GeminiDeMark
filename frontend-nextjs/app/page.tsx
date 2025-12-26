@@ -59,8 +59,15 @@ export default function Home() {
 
     try {
       // Check original
-      const isOriginal = await checkOriginal(file);
-      setOriginalStatus(isOriginal ? 'Original Image Detected' : 'Not an original image (Meta missing)');
+      const { is_google } = await checkOriginal(file);
+
+      if (!is_google) {
+        setOriginalStatus('Not an original Gemini image (Meta missing)');
+        setProcessing(false);
+        return; // HALT PROCESSING
+      }
+
+      setOriginalStatus('Original Image Detected');
 
       if (!engine) {
         console.error("Engine not ready");

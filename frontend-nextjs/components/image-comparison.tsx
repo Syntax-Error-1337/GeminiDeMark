@@ -43,103 +43,134 @@ export function ImageComparison({
         };
     }, [originalUrl, processedUrl]);
 
+    const isError = originalStatus?.includes('Not an original');
+
     return (
-        <section id="singlePreview" className="relative bg-slate-900 border-t border-white/10 py-12">
+        <section id="singlePreview" className="relative bg-[#0b1221] border-t border-white/5 py-12 min-h-screen">
             <div className="max-w-[90rem] mx-auto px-4">
-                <div className="flex flex-col xl:flex-row gap-8">
+                <div className="flex flex-col xl:flex-row gap-8 items-start">
                     {/* Images Grid */}
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-500">
+                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Original Image */}
-                        <div className="relative group">
-                            <div className="absolute inset-0 bg-gray-900/50 rounded-2xl border border-white/10 backdrop-blur-sm shadow-2xl transition-all group-hover:border-white/20"></div>
-                            <div className="relative rounded-2xl overflow-hidden">
-                                <div className="bg-white/5 px-6 py-4 border-b border-white/5 flex justify-between items-center">
-                                    <h3 className="font-semibold text-slate-200 flex items-center gap-2">
-                                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]"></span>
-                                        <span>{t('preview.original') || 'Original'}</span>
-                                    </h3>
-                                    {watermarkInfo && (
-                                        <span className="text-xs text-slate-400 font-mono bg-black/20 px-2 py-1 rounded">
-                                            {t('info.size')}: {width}×{height} | WM: {watermarkInfo.size}px
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="w-full aspect-[4/3] p-4 bg-[#0f172a] relative flex items-center justify-center">
-                                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iI2Y5ZmRmZCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-30"></div>
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={originalUrl}
-                                        alt="Original"
-                                        className="relative z-10 max-w-full max-h-full object-contain mx-auto rounded-lg shadow-lg block hover:scale-[1.02] transition-transform duration-300"
-                                        data-zoomable
-                                    />
-                                </div>
+                        <div className="flex flex-col bg-[#151f32] rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
+                            <div className="bg-[#1e293b]/50 px-5 py-3 border-b border-white/5 flex justify-between items-center backdrop-blur-sm">
+                                <h3 className="font-semibold text-slate-200 flex items-center gap-2.5 text-sm tracking-wide">
+                                    <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"></span>
+                                    Original Source
+                                </h3>
+                                {watermarkInfo && (
+                                    <span className="text-[11px] text-slate-400 font-mono tracking-tight bg-black/20 px-2.5 py-1 rounded-md border border-white/5">
+                                        Resolution: {width}×{height} <span className="text-slate-600 mx-1">|</span> WM: {watermarkInfo.size}px
+                                    </span>
+                                )}
+                            </div>
+                            <div className="relative w-full aspect-[4/3] bg-[#0f172a] flex items-center justify-center overflow-hidden p-4 group">
+                                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iI2Y5ZmRmZCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-20"></div>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                    src={originalUrl}
+                                    alt="Original"
+                                    className="relative z-10 max-w-full max-h-full object-contain shadow-lg rounded-lg transition-transform duration-500 hover:scale-[1.02]"
+                                    data-zoomable
+                                />
+                                {isError && (
+                                    <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[2px] flex items-center justify-center">
+                                        <div className="bg-red-500/10 border border-red-500/20 px-6 py-4 rounded-xl backdrop-blur-md flex flex-col items-center gap-2">
+                                            <span className="material-icons-round text-red-500 text-3xl">error_outline</span>
+                                            <p className="text-red-400 font-medium text-sm">Image not generated by Gemini</p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
                         {/* Processed Results */}
-                        {processedUrl && (
-                            <div className="relative group">
-                                <div className="absolute inset-0 bg-gray-900/50 rounded-2xl border border-emerald-500/30 backdrop-blur-sm shadow-2xl transition-all group-hover:border-emerald-500/50 ring-1 ring-emerald-500/20"></div>
-                                <div className="relative rounded-2xl overflow-hidden">
-                                    <div className="bg-emerald-500/10 px-6 py-4 border-b border-emerald-500/20 flex justify-between items-center">
-                                        <h3 className="font-semibold text-emerald-400 flex items-center gap-2">
-                                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse"></span>
-                                            <span>{t('preview.result') || 'Result'}</span>
-                                        </h3>
-                                        <span className="text-xs text-emerald-400 font-mono bg-emerald-900/20 px-2 py-1 rounded">
-                                            {t('info.status')}: {t('info.removed') || 'Watermark Removed'}
-                                        </span>
-                                    </div>
-                                    <div className="w-full aspect-[4/3] p-4 bg-[#0f172a] relative flex items-center justify-center">
-                                        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iI2Y5ZmRmZCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-30"></div>
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={processedUrl}
-                                            alt="Processed"
-                                            className="relative z-10 max-w-full max-h-full object-contain mx-auto rounded-lg shadow-lg block hover:scale-[1.02] transition-transform duration-300"
-                                            data-zoomable
-                                        />
-                                    </div>
-                                </div>
+                        <div className={cn(
+                            "flex flex-col bg-[#151f32] rounded-2xl border overflow-hidden shadow-2xl transition-all duration-500",
+                            processedUrl ? "border-emerald-500/20 shadow-emerald-500/5" : "border-white/5 opacity-50 grayscale"
+                        )}>
+                            <div className={cn(
+                                "px-5 py-3 border-b flex justify-between items-center backdrop-blur-sm",
+                                processedUrl ? "bg-emerald-950/20 border-emerald-500/10" : "bg-white/5 border-white/5"
+                            )}>
+                                <h3 className={cn("font-semibold flex items-center gap-2.5 text-sm tracking-wide", processedUrl ? "text-emerald-400" : "text-slate-400")}>
+                                    <span className={cn("w-2 h-2 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.6)]", processedUrl ? "bg-emerald-500" : "bg-slate-500")}></span>
+                                    Restored Image
+                                </h3>
+                                {processedUrl && (
+                                    <span className="text-[11px] text-emerald-500/80 font-mono tracking-tight bg-emerald-950/30 px-2.5 py-1 rounded-md border border-emerald-500/10">
+                                        System Status: Successfully Removed
+                                    </span>
+                                )}
                             </div>
-                        )}
+                            <div className="relative w-full aspect-[4/3] bg-[#0f172a] flex items-center justify-center overflow-hidden p-4 group">
+                                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iI2Y5ZmRmZCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-20"></div>
+                                {processedUrl ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img
+                                        src={processedUrl}
+                                        alt="Processed"
+                                        className="relative z-10 max-w-full max-h-full object-contain shadow-lg rounded-lg transition-transform duration-500 hover:scale-[1.02]"
+                                        data-zoomable
+                                    />
+                                ) : (
+                                    <div className="flex flex-col items-center gap-3 text-slate-600">
+                                        <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/5 animate-pulse">
+                                            <span className="material-icons-round text-xl">auto_awesome</span>
+                                        </div>
+                                        <p className="text-xs font-medium">Processing...</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Control Panel */}
-                    <div className="w-full xl:w-96 flex-shrink-0">
-                        <div className="bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-6 sticky top-24">
-                            <h4 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                                <span className="material-icons-round text-indigo-400">tune</span>
-                                <span>{t('panel.title') || 'Control Panel'}</span>
+                    {/* Command Center */}
+                    <div className="w-full xl:w-80 flex-shrink-0">
+                        <div className="bg-[#151f32] rounded-2xl border border-white/10 p-6 sticky top-24 shadow-xl">
+                            <h4 className="text-sm font-bold text-slate-200 mb-6 flex items-center gap-2.5 uppercase tracking-wider">
+                                <span className="material-icons-round text-indigo-400 text-lg">tune</span>
+                                Command Center
                             </h4>
 
-                            <div className="space-y-4">
-                                {processedUrl && (
-                                    <Button
-                                        variant="gradient"
-                                        size="lg"
-                                        className="w-full group hover:-translate-y-1"
-                                        onClick={onDownload}
-                                    >
-                                        <span className="material-icons-round mr-2 group-hover:animate-bounce">download</span>
-                                        {t('btn.download') || 'Download Result'}
-                                    </Button>
-                                )}
+                            <div className="space-y-3">
+                                <Button
+                                    variant="default"
+                                    size="lg"
+                                    className={cn(
+                                        "w-full h-12 text-sm font-bold shadow-lg shadow-indigo-500/20 transition-all",
+                                        !processedUrl || isError ? "opacity-50 cursor-not-allowed bg-slate-700 text-slate-400" : "bg-gradient-to-r from-blue-600 to-emerald-500 hover:from-blue-500 hover:to-emerald-400 text-white hover:-translate-y-0.5"
+                                    )}
+                                    onClick={onDownload}
+                                    disabled={!processedUrl || isError}
+                                >
+                                    <span className="material-icons-round mr-2 text-lg">download</span>
+                                    {t('btn.download') || 'Save Image'}
+                                </Button>
 
                                 <Button
                                     variant="outline"
                                     size="lg"
-                                    className="w-full"
+                                    className="w-full h-12 border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 text-sm font-medium transition-all"
                                     onClick={onReset}
                                 >
-                                    <span className="material-icons-round mr-2">restart_alt</span>
-                                    {t('btn.reset') || 'Reset / New Image'}
+                                    <span className="material-icons-round mr-2 text-lg rotate-180">refresh</span>
+                                    {t('btn.reset') || 'Process Another'}
                                 </Button>
                             </div>
 
-                            <div className="mt-6 text-sm text-slate-400 min-h-[1.25rem] text-center font-medium">
-                                {originalStatus && <p className="text-warn">{originalStatus}</p>}
+                            <div className="mt-6 pt-6 border-t border-white/5 text-center">
+                                {isError ? (
+                                    <p className="text-xs font-bold text-red-400 bg-red-500/5 py-2 px-3 rounded-lg border border-red-500/10 flex items-center justify-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                                        Not a Gemini Image
+                                    </p>
+                                ) : (
+                                    <p className="text-xs font-bold text-amber-500/80 bg-amber-500/5 py-2 px-3 rounded-lg border border-amber-500/10 flex items-center justify-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80"></span>
+                                        {originalStatus || 'Ready to Process'}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </div>
