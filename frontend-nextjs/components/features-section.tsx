@@ -9,19 +9,25 @@ export function FeaturesSection() {
             id: 'speed',
             icon: 'bolt',
             title: t('feature.speed.title') || 'Lightning Fast',
-            desc: t('feature.speed.desc') || 'Proprietary optimizations ensure 10x faster processing than server-side alternatives.',
+            desc: t('feature.speed.desc') || 'Instant processing with our advanced client-side engine. No uploading, no waiting - results in seconds.',
+        },
+        {
+            id: 'quality',
+            icon: 'high_quality',
+            title: t('feature.quality.title') || 'Lossless Quality',
+            desc: t('feature.quality.desc') || 'Pixel-perfect restoration without any quality degradation. Your images remain in their original resolution.',
         },
         {
             id: 'privacy',
-            icon: 'security',
-            title: t('feature.privacy.title') || 'Privacy First',
-            desc: t('feature.privacy.desc') || 'Your photos never leave your device. All AI processing happens locally in your browser.',
+            icon: 'shield',
+            title: t('feature.privacy.title') || 'Privacy Protected',
+            desc: t('feature.privacy.desc') || 'Your images are processed locally in your browser. We never store or access your original photos.',
         },
         {
-            id: 'free',
-            icon: 'savings',
-            title: t('feature.free.title') || 'Completely Free',
-            desc: t('feature.free.desc') || 'No subscriptions, no hidden fees, and no blurred results. Open source and free forever.',
+            id: 'smart',
+            icon: 'auto_awesome',
+            title: t('feature.smart.title') || 'Smart Detection',
+            desc: t('feature.smart.desc') || 'Automatically detects watermark size and position. No manual configuration needed - just upload and go.',
         }
     ];
 
@@ -38,19 +44,19 @@ export function FeaturesSection() {
                     </p>
                 </div>
 
-                {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Features Grid - Now 4 cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {features.map((feature) => (
-                        <Card key={feature.id} variant="glass" className="p-8 hover:-translate-y-1">
+                        <Card key={feature.id} variant="glass" className="p-6 hover:-translate-y-1">
                             {/* Icon Container */}
-                            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
-                                <span className="material-icons-round text-3xl text-primary">
+                            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5">
+                                <span className="material-icons-round text-2xl text-primary">
                                     {feature.icon}
                                 </span>
                             </div>
 
                             {/* Content */}
-                            <h3 className="text-xl font-bold mb-3 tracking-tight text-foreground">
+                            <h3 className="text-lg font-bold mb-2 tracking-tight text-foreground">
                                 {feature.title}
                             </h3>
                             <p className="text-sm leading-relaxed text-muted-foreground">
