@@ -152,3 +152,38 @@ exports.verifyEmailGet = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
+exports.resendVerification = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            // For security, do not reveal if user exists. 
+            // Claim sent if it exists, or just say "If an account exists, email sent."
+            return res.status(200).send({ message: "If an account with that email exists and is unverified, a verification link has been sent." });
+        }
+
+        if (user.isVerified) {
+            return res.status(400).send({ message: "This account is already verified. Please login." });
+        }
+
+        // Generate new token or use existing? 
+        // Better to generate new one to invalidate old if logic required, but simple update is fine.
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        user.verificationToken = verificationToken;
+        await user.save();
+
+        try {
+            await emailService.sendVerificationEmail(user.email, verificationToken);
+            res.status(200).send({ message: "Verification email resent successfully." });
+        } catch (emailError) {
+            console.error("Resend Email Error:", emailError);
+            res.status(500).send({ message: "Failed to send email. Please try again later." });
+        }
+
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+};

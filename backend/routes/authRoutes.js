@@ -8,6 +8,7 @@ const r = express.Router();
 r.post('/register', authController.register);
 r.post('/login', authController.login);
 r.post('/verify-email', authController.verifyEmail);
+r.post('/resend-verification', authController.resendVerification);
 r.get('/verify-email', authController.verifyEmailGet); // For email links: /api/auth/verify-email?token=...
 // Note: If using GET for direct link verification from email:
 // r.get('/verify-email/:token', ...);

@@ -8,6 +8,7 @@ interface AuthContextType {
     login: (email: string, pass: string) => Promise<any>;
     register: (user: string, email: string, pass: string) => Promise<any>;
     logout: () => void;
+    resendVerification: (email: string) => Promise<any>;
     isLoading: boolean;
 }
 
@@ -49,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isLoggedIn: !!user, login, register, logout, isLoading }}>
+        <AuthContext.Provider value={{ user, isLoggedIn: !!user, login, register, logout, resendVerification: (email) => Auth.resendVerification(email), isLoading }}>
             {children}
         </AuthContext.Provider>
     );

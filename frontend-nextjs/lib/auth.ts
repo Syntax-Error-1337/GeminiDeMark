@@ -48,6 +48,13 @@ export const Auth = {
                 body: JSON.stringify({ email, password })
             });
 
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") === -1) {
+                const text = await response.text();
+                console.error("Non-JSON response:", text);
+                throw new Error("Server returned non-JSON response. Check console for details.");
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
@@ -113,6 +120,38 @@ export const Auth = {
             return { success: true, message: data.message };
         } catch (error: any) {
             console.error('Verification Error:', error);
+            return { success: false, message: error.message };
+        }
+    },
+
+    async resendVerification(email: string): Promise<AuthResponse> {
+        try {
+            const response = await fetch(`${this.API_URL}/resend-verification`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") === -1) {
+                // This usually happens if the route doesn't exist (404 HTML) or server crashed
+                const text = await response.text();
+                console.error("Resend Verification Non-JSON response:", text);
+                return { success: false, message: "Backend route not found. Please RESTART the backend server." };
+            }
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Return success false but with the message from backend
+                return { success: false, message: data.message || 'Resend failed' };
+            }
+
+            return { success: true, message: data.message };
+        } catch (error: any) {
+            console.error('Resend Verification Error:', error);
             return { success: false, message: error.message };
         }
     },

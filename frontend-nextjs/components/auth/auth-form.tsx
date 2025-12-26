@@ -6,12 +6,38 @@ import { useI18n } from '@/components/providers/i18n-provider';
 import { Button } from '@/components/ui/button';
 
 export function AuthForm() {
-    const { login, register } = useAuth();
+    const { login, register, resendVerification } = useAuth();
     const { t } = useI18n();
     const [isRegisterMode, setIsRegisterMode] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [resendLoading, setResendLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
+
+    const handleResendVerification = async () => {
+        const formData = new FormData(document.querySelector('form') as HTMLFormElement);
+        const email = formData.get('email') as string;
+
+        if (!email) {
+            setError("Please enter your email address to resend verification.");
+            return;
+        }
+
+        setResendLoading(true);
+        try {
+            const res = await resendVerification(email);
+            if (res.success) {
+                setSuccess(res.message || "Verification email resent!");
+                setError(null);
+            } else {
+                setError(res.message || "Failed to resend.");
+            }
+        } catch (err) {
+            setError("Failed to resend verification email.");
+        } finally {
+            setResendLoading(false);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -45,6 +71,8 @@ export function AuthForm() {
             setLoading(false);
         }
     };
+
+    const isVerificationError = error?.toLowerCase().includes('verify');
 
     return (
         <div id="login-view" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background">
@@ -109,7 +137,23 @@ export function AuthForm() {
                     </div>
 
                     {error && (
-                        <div className="text-destructive text-sm text-center bg-destructive/10 p-2 rounded border border-destructive/20">{error}</div>
+                        <div className="text-destructive text-sm text-center bg-destructive/10 p-2 rounded border border-destructive/20">
+                            {error}
+                            {isVerificationError && !isRegisterMode && (
+                                <div className="mt-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleResendVerification}
+                                        disabled={resendLoading}
+                                        className="w-full"
+                                    >
+                                        {resendLoading ? "Sending..." : "Resend Verification Email"}
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
                     )}
                     {success && (
                         <div className="text-emerald-500 text-sm text-center bg-emerald-500/10 p-2 rounded border border-emerald-500/20">{success}</div>
