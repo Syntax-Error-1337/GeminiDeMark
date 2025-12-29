@@ -61,13 +61,14 @@ If you prefer to run Docker Compose commands directly:
 The deployment consists of three main services:
 
 -   **Nginx (Reverse Proxy)**:
-    -   Listens on Port `80`.
+    -   Listens on Port `80` (HTTP) and `443` (HTTPS).
     -   Serves as the entry point.
     -   Proxies traffic to the Frontend and Backend.
 -   **Frontend (Next.js)**:
     -   Internal Port: `3000`.
 -   **Backend (Node.js)**:
-    -   Internal Port: `8080`.
+    -   Exposed Port: `3000` (Direct Access).
+    -   Internal Port: `3000`.
 
 ## Troubleshooting
 

@@ -22,13 +22,13 @@ services:
     image: ghcr.io/syntax-error-1337/geminidemark-backend:latest
     container_name: gemini-backend
     restart: always
+    ports:
+      - "3000:3000"
     env_file:
-      - ../backend/.env
+      - .env
     environment:
       - NODE_ENV=production
       - DB_HOST=db
-      - PORT=5000
-      - APP_BASE_URL=http://localhost:8080
     depends_on:
       - db
     extra_hosts:
@@ -41,11 +41,13 @@ services:
     container_name: gemini-nginx
     restart: always
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
     environment:
       - MODSEC_RULE_ENGINE=DetectionOnly
     volumes:
       - ./nginx/default.conf.template:/etc/nginx/templates/conf.d/default.conf.template
+      - ./nginx/certs:/etc/nginx/certs
     depends_on:
       - frontend
       - backend

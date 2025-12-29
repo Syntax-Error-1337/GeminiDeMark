@@ -25,7 +25,14 @@ To enable deployment, the following **Repository Secrets** must be configured in
 | :--- | :--- | :--- |
 | `SSH_HOST` | The IP address or hostname of your production server. | `1.2.3.4` |
 | `SSH_USER` | The username to log in to the server. | `ubuntu` |
-| `SSH_KEY` | The private SSH key for authentication. | `-----BEGIN OPENSSH PRIVATE KEY----- ...` |
+| `SSH_PASSWORD` | The password for the SSH user. | `mypassword123` |
+| `ENV_FILE` | The complete content of your `.env` file. | (See below) |
+
+### `ENV_FILE` Content
+Create a secret named `ENV_FILE` and paste the entire content of your backend `.env` file into it. Ensure it includes:
+- `APP_BASE_URL=https://your-domain.com` (or http://server-ip:3000)
+- Email Configuration (SMTP/SES)
+- Database credentials
 
 > **Note**: The `GITHUB_TOKEN` is automatically provided by GitHub Actions and is used to authenticate with GHCR.
 

@@ -70,7 +70,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           source: "cicd/*"
           target: "/home/${{ secrets.SSH_USER }}/app"
 
@@ -79,15 +79,13 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
           script: |
             cd /home/${{ secrets.SSH_USER }}/app/cicd
-            # You might need to update docker-compose.yml to use the GHCR images instead of local build
-            # For this setup, we will use the local build context as defined in docker-compose.yml
-            # If you want to use the pushed images, you would need to update the docker-compose.yml dynamically or have a separate one.
-            # Assuming we want to build on server or pull from registry.
-            # For "easy deployment", pulling pre-built images is faster.
-            # However, the current docker-compose.yml builds from context.
-            # Let's just run the deploy script which builds/pulls.
+            
+            # Create/Update .env file from Secret
+            echo "${{ secrets.ENV_FILE }}" > .env
+            
             chmod +x deploy.sh
             ./deploy.sh
