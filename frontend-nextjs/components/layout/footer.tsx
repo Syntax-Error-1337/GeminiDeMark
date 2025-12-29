@@ -76,10 +76,10 @@ export function Footer() {
                         </div>
 
                         <div className="flex items-center gap-6">
-                            <Link href="/privacy.html" className="hover:text-foreground transition-colors">
+                            <Link href="/privacy" className="hover:text-foreground transition-colors">
                                 {t('footer.privacy') || 'Privacy'}
                             </Link>
-                            <Link href="/terms.html" className="hover:text-foreground transition-colors">
+                            <Link href="/terms" className="hover:text-foreground transition-colors">
                                 {t('footer.terms') || 'Terms'}
                             </Link>
                         </div>
