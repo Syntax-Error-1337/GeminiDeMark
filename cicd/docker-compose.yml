@@ -22,8 +22,7 @@ services:
     image: ghcr.io/syntax-error-1337/geminidemark-backend:main
     container_name: gemini-backend
     restart: always
-    ports:
-      - "3000:3000"
+
     env_file:
       - .env
     environment:
