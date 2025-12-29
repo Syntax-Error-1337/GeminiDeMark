@@ -73,6 +73,15 @@ export function Footer() {
                             <span className="text-red-500">♥</span>
                             <span>by</span>
                             <span className="text-foreground font-semibold">Himanshu Tiwari</span>
+                            <a
+                                href="https://himanshu.pro"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="ml-4 px-3 py-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-1"
+                            >
+                                <span>Portfolio</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
+                            </a>
                         </div>
 
                         <div className="flex items-center gap-6">
