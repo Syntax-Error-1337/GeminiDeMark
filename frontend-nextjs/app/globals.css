@@ -274,8 +274,17 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgb(var(--primary) / 0.2);
-  color: rgb(var(--foreground));
+  background: #6366f1 !important;
+  /* Indigo 500 */
+  color: #ffffff !important;
+  /* White */
+}
+
+::-moz-selection {
+  background: #6366f1 !important;
+  /* Indigo 500 */
+  color: #ffffff !important;
+  /* White */
 }
 
 /* Utility Classes */

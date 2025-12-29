@@ -18,10 +18,10 @@ export function FeaturesSection() {
             desc: t('feature.quality.desc') || 'Pixel-perfect restoration without any quality degradation. Your images remain in their original resolution.',
         },
         {
-            id: 'privacy',
-            icon: 'shield',
-            title: t('feature.privacy.title') || 'Privacy Protected',
-            desc: t('feature.privacy.desc') || 'Your images are processed locally in your browser. We never store or access your original photos.',
+            id: 'history',
+            icon: 'history',
+            title: t('feature.history.title') || 'Secure Cloud History',
+            desc: t('feature.history.desc') || 'All processed images are securely stored in your history for easy access and download.',
         },
         {
             id: 'smart',

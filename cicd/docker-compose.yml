@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ../frontend-nextjs
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=/api/auth
+    image: ghcr.io/syntax-error-1337/geminidemark-frontend:latest
+    container_name: gemini-frontend
+    restart: always
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    image: ghcr.io/syntax-error-1337/geminidemark-backend:latest
+    container_name: gemini-backend
+    restart: always
+    env_file:
+      - ../backend/.env
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=db
+      - PORT=5000
+      - APP_BASE_URL=http://localhost:8080
+    depends_on:
+      - db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app-network
+
+  nginx:
+    image: owasp/modsecurity-crs:nginx
+    container_name: gemini-nginx
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - MODSEC_RULE_ENGINE=DetectionOnly
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/conf.d/default.conf.template
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0
+    container_name: gemini-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: watermark_db
+      MYSQL_USER: hermes
+      MYSQL_PASSWORD: testing123
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../backend/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
