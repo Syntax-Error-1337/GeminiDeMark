@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         - NEXT_PUBLIC_API_URL=/api/auth
-    image: ghcr.io/syntax-error-1337/geminidemark-frontend:latest
+    image: ghcr.io/syntax-error-1337/geminidemark-frontend:main
     container_name: gemini-frontend
     restart: always
     environment:
@@ -19,7 +19,7 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
-    image: ghcr.io/syntax-error-1337/geminidemark-backend:latest
+    image: ghcr.io/syntax-error-1337/geminidemark-backend:main
     container_name: gemini-backend
     restart: always
     ports:
@@ -65,7 +65,7 @@ services:
       MYSQL_ROOT_PASSWORD: rootpassword
     volumes:
       - mysql_data:/var/lib/mysql
-      - ../backend/schema.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
 

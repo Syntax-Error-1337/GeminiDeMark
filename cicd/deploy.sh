@@ -23,7 +23,7 @@ if [ ! -f ./nginx/certs/nginx-selfsigned.crt ]; then
 fi
 
 # Restart services
-docker compose up -d --build
+docker compose up -d
 
 # Prune unused images
 docker image prune -f
