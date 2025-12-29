@@ -35,24 +35,30 @@ app.get('/', (req, res) => {
 });
 
 // Sync Database and Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
-sequelize.sync({ alter: true })
-    .then(() => {
-        console.log('Database synced successfully.');
-        const server = app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}.`);
+const connectWithRetry = (retries = 5, delay = 5000) => {
+    sequelize.sync({ alter: true })
+        .then(() => {
+            console.log('Database synced successfully.');
+            const server = app.listen(PORT, () => {
+                console.log(`Server is running on port ${PORT}.`);
+            });
+
+            server.on('error', (error) => {
+                console.error('Server Error:', error);
+            });
+        })
+        .catch((err) => {
+            console.error('Failed to sync database:', err.message);
+            if (retries > 0) {
+                console.log(`Retrying database connection in ${delay / 1000} seconds... (${retries} attempts left)`);
+                setTimeout(() => connectWithRetry(retries - 1, delay), delay);
+            } else {
+                console.error('Max retries reached. Exiting...');
+                process.exit(1);
+            }
         });
+};
 
-        server.on('error', (error) => {
-            console.error('Server Error:', error);
-        });
-
-        // Keep-alive to prevent process exit if something closes the server
-        setInterval(() => {
-            // Heartbeat
-        }, 100000);
-    })
-    .catch((err) => {
-        console.error('Failed to sync database: ' + err.message);
-    });
+connectWithRetry();
