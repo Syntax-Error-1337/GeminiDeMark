@@ -10,7 +10,7 @@ if [ ! -f .env ] && [ -f ../backend/.env ]; then
 fi
 
 # Pull latest images
-docker-compose pull
+docker compose pull
 
 # Check and generate SSL certificates
 if [ ! -f ./nginx/certs/nginx-selfsigned.crt ]; then
@@ -23,7 +23,7 @@ if [ ! -f ./nginx/certs/nginx-selfsigned.crt ]; then
 fi
 
 # Restart services
-docker-compose up -d --build
+docker compose up -d --build
 
 # Prune unused images
 docker image prune -f
