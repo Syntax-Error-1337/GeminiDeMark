@@ -19,3 +19,6 @@ yarn-error.log*
 
 # Storage
 backend/storage/
+
+# CICD
+cicd/nginx/certs/
