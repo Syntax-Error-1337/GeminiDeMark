@@ -61,11 +61,11 @@ export default function Home() {
       // Check original
       const { is_google } = await checkOriginal(file);
 
-      if (!is_google) {
-        setOriginalStatus('Not an original Gemini image (Meta missing)');
-        setProcessing(false);
-        return; // HALT PROCESSING
-      }
+      // if (!is_google) {
+      //   setOriginalStatus('Not an original Gemini image (Meta missing)');
+      //   setProcessing(false);
+      //   return; // HALT PROCESSING
+      // }
 
       setOriginalStatus('Original Image Detected');
 
