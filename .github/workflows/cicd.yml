@@ -74,6 +74,22 @@ jobs:
           mkdir -p cicd/mysql
           cp backend/schema.sql cicd/mysql/init.sql
 
+      - name: Discovery - Check Server Config
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "--- Nginx Sites Enabled ---"
+            ls -F /etc/nginx/sites-enabled/ || echo "Nginx not found in standard path"
+            
+            echo "--- Active Ports ---"
+            netstat -tan | grep LISTEN | grep -E ":80|:443|:1004"
+            
+            echo "--- Verify Local Access ---"
+            curl -I http://localhost:1004 || echo "Local container not reachable"
+
       - name: Create deployment directory
         uses: appleboy/ssh-action@master
         with:
