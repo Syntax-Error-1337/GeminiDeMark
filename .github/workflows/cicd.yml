@@ -74,21 +74,25 @@ jobs:
           mkdir -p cicd/mysql
           cp backend/schema.sql cicd/mysql/init.sql
 
-      - name: Discovery - Check Server Config
+      - name: Discovery - Deep Server Scan
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "--- Nginx Sites Enabled ---"
-            ls -F /etc/nginx/sites-enabled/ || echo "Nginx not found in standard path"
+            echo "=== Checking Running Docker Containers ==="
+            sudo docker ps
             
-            echo "--- Active Ports ---"
-            netstat -tan | grep LISTEN | grep -E ":80|:443|:1004"
+            echo "\n=== Searching for Nginx Configs ==="
+            find /etc -name "nginx.conf" 2>/dev/null || echo "nginx.conf not found in /etc"
+            ls -d /etc/nginx* 2>/dev/null || echo "No /etc/nginx directory"
             
-            echo "--- Verify Local Access ---"
-            curl -I http://localhost:1004 || echo "Local container not reachable"
+            echo "\n=== Checking for Processes on 80/443 ==="
+            sudo lsof -i :80 || sudo netstat -tulpn | grep :80 || echo "Could not determine process on port 80"
+            
+            echo "\n=== Active Processes (Nginx/Traefik/Proxy) ==="
+            ps aux | grep -iE "nginx|traefik|proxy" | grep -v grep
 
       - name: Create deployment directory
         uses: appleboy/ssh-action@master
