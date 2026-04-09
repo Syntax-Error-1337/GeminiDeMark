@@ -79,7 +79,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "cicd/*"
           target: "/home/${{ secrets.SSH_USER }}/app"
 
@@ -92,7 +92,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: GITHUB_TOKEN,GITHUB_ACTOR,DOMAIN_NAME
           script: |
             cd /home/${{ secrets.SSH_USER }}/app/cicd
