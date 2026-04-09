@@ -8,7 +8,6 @@ services:
       args:
         - NEXT_PUBLIC_API_URL=/api/auth
     image: ghcr.io/syntax-error-1337/geminidemark-frontend:main
-    container_name: gemini-frontend
     restart: always
     environment:
       - NODE_ENV=production
@@ -20,9 +19,7 @@ services:
       context: ../backend
       dockerfile: Dockerfile
     image: ghcr.io/syntax-error-1337/geminidemark-backend:main
-    container_name: gemini-backend
     restart: always
-
     env_file:
       - .env
     environment:
@@ -38,13 +35,13 @@ services:
 
   nginx:
     image: owasp/modsecurity-crs:nginx
-    container_name: gemini-nginx
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - "${HTTP_PORT:-1004}:80"
+      - "${HTTPS_PORT:-1005}:443"
     environment:
       - MODSEC_RULE_ENGINE=DetectionOnly
+      - DOMAIN_NAME=${DOMAIN_NAME:-localhost}
     volumes:
       - ./nginx/default.conf.template:/etc/nginx/templates/conf.d/default.conf.template
       - ./nginx/certs:/etc/nginx/certs
@@ -56,7 +53,6 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: gemini-db
     restart: always
     environment:
       MYSQL_DATABASE: watermark_db

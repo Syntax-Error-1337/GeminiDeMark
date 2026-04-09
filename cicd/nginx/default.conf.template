@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name localhost;
+    server_name ${DOMAIN_NAME};
     client_max_body_size 50M;
 
     # Backend API Proxy
@@ -32,7 +32,7 @@ server {
 
 server {
     listen 443 ssl;
-    server_name localhost;
+    server_name ${DOMAIN_NAME};
     client_max_body_size 50M;
 
     ssl_certificate /etc/nginx/certs/nginx-selfsigned.crt;

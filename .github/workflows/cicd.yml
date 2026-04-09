@@ -88,19 +88,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
+          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          envs: GITHUB_TOKEN,GITHUB_ACTOR
+          envs: GITHUB_TOKEN,GITHUB_ACTOR,DOMAIN_NAME
           script: |
             cd /home/${{ secrets.SSH_USER }}/app/cicd
             
             # Login to GHCR
             echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
             
-            # Create/Update .env file from Secret
+            # Create/Update .env file from Secret and combine with CI variables
             echo "${{ secrets.ENV_FILE }}" > .env
+            echo "DOMAIN_NAME=$DOMAIN_NAME" >> .env
+            echo "HTTP_PORT=1004" >> .env
+            echo "HTTPS_PORT=1005" >> .env
+            echo "COMPOSE_PROJECT_NAME=gemini-demark" >> .env
             
             chmod +x deploy.sh
             ./deploy.sh
