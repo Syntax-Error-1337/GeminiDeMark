@@ -80,8 +80,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "cicd/*"
+          source: "cicd"
           target: "/home/${{ secrets.SSH_USER }}/app"
+          timeout: 60s
+          overwrite: true
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
